@@ -1,6 +1,10 @@
----
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
+# For future use
 
-layout: home
----
+Hello World
+
+## Test Links
+
+### Linux
+
+* [UEFI + GPT Bootable Linux Stick](linux/usb-boot.md)
+* [debootstapped ubuntu](linux/debootstrap-ubuntu.md)
