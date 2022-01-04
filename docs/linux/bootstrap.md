@@ -2,8 +2,8 @@
 
 ## Ubuntu
 
-* [bootstrap Ubuntu](linux/bootstrap-ubuntu.md)
+* [bootstrap Ubuntu](bootstrap-ubuntu.md)
 
 ## Arch Linux
 
-* [bootstrap Arch Linux](linux/bootstrap-arch-linux.md)
+* [bootstrap Arch Linux](bootstrap-arch-linux.md)
