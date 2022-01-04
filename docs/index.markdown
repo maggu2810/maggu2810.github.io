@@ -7,4 +7,4 @@ Hello World
 ### Linux
 
 * [UEFI + GPT Bootable Linux Stick](linux/usb-boot.md)
-* [debootstapped ubuntu](linux/debootstrap-ubuntu.md)
+* [bootstrap](linux/bootsrap.md)
