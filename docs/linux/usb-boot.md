@@ -114,119 +114,51 @@ umount /tmp/3
 
 ### Grub
 
+We decide to use Grub as we can use one configuration for:
 
-Damit das Rettungssystem auf möglichst allen PCs booten kann, werden nacheinander
+* boot from PCs with BIOS or UEFI Legacy Mode
+* boot from 64-bit UEFI
+* boot from 32-bit UEFI
 
-* `grub-pc` für das Booten auf PCs mit BIOS oder mit UEFI im Legacy-Modus
-* `grub-efi-amd64` für PCs mit einem 64-bittigen (U)EFI
-* `grub-efi-ia32` für PCs mit einem 32-bittigen (U)EFI (vor allem frühe Computer von Apple mit Intel CPU und einige Systeme mit Intel Atom)
+We apply the steps in an Arch Linux system as we can install ONE grub for all targets. On Debian / Ubuntu you need to install different packages (and remove them again, as only one can be installed in parallel).
 
-installiert.
+So, let's assume you have a running Arch Linux system (or chroot setup with all relevant dev, proc, sys etc. stuff).
 
-We are using an Ubuntu system for this example to install all that stuff.
-
-First unload the EFI related support to ensure no variables are modified:
-
-```
-umount /sys/firmware/efi/efivars
-rmmod efivarfs
-rmmod efi_pstore
-rmmod efivars
-```
-
-Mount and chroot
+Install Grub
 
 ```
-mkdir -p /tmp/3
-mount /dev/sdb3 /tmp/3/ -o subvol=ubuntu.focal
-mount -o bind /sys /tmp/3/sys
-mount -o bind /dev /tmp/3/dev
-mount -o bind /proc /tmp/3/proc
-chroot /tmp/3
+pacman -S grub
 ```
 
-Noch immer in der chroot-Umgebung des Rettungssystems wird nun also ein Verzeichnis zum Mounten der EFI System Partition angelegt, selbige dort gemountet und es werden noch ein paar weitere notwendige Verzeichinsse angelegt
+Mount ESP
 
 ```
-mkdir -p /boot/efi
-mount /dev/sdb1 /boot/efi
-mkdir -p /boot/efi/EFI/boot
-mkdir -p /boot/efi/EFI/grub
+mkdir -p /efi
+mount /dev/sdb1 /efi
 ```
 
-Hinweis: Nicht vergessen, dass sich die Pfadangaben auf das chroot-System, also das Rettungssystem beziehen. Außerhalb der chroot Umgebung wäre als obeispielsweise »/boot/efi/EFI« in »/mnt/tmp/boot/efi/EFI« zu finden
-
-First remove all potential installed grub loaders:
-
 ```
-dpkg --get-selections | grep grub | awk '{print $1}' | xargs apt purge -y
-```
+mkdir -p /efi/EFI/BOOT/
+grub-install --target=i386-pc /dev/sdb
 
-Als letztes werden für jeden der drei Grub-Varianten einzeln und nacheinander das grub-Paket installiert, dann grub selbst installiert und dann das jeweilige Paket wieder deinstalliert. Anders geht es nicht, weil die verschiedenen grub-Pakete in Konflikt miteinander stehen, es hat aber außerdem den Vorteil, dass man sich später, zB bei einem Update des Rettungssystems, den Bootloader nicht irrtümlich überschreiben lassen kann.
+grub-install --target=i386-efi --boot-directory=/efi/boot --efi-directory=/efi --bootloader-id=grub --no-nvram
+mkdir -p /efi/EFI/BOOT/
+cp /efi/EFI/grub/grubia32.efi /efi/EFI/BOOT/BOOTIA32.EFI
 
-Den Anfang macht der heikelste Bootloader Debianpackage.png grub-pc. Man installiert ihn mit
-
-```
-DEBIAN_PRIORITY=low apt install grub-pc
+grub-install --target=x86_64-efi --boot-directory=/efi/boot --efi-directory=/efi --bootloader-id=grub --no-nvram
+mkdir -p /efi/EFI/BOOT/
+cp /efi/EFI/grub/grubx64.efi /efi/EFI/BOOT/BOOTX64.EFI
 ```
 
-muss aber aufpassen, dass im darauf folgenden Konfigurationsdialog alle Geräte abgewählt sind und man muss daraufhin noch einmal bestätigen, dass grub tatsächlich auf kein Gerät installiert werden soll. Die restlichen Optionen nach denen gefragt wird spielen weiter keine Rolle und die Vorschläge können einfach bestätigt werden. Erst nach der Installation des Pakets erfolgt die eigentliche Installation von grub(-pc):
-
-```
-grub-install --boot-directory=/boot/efi/EFI /dev/sdb
-```
-
-Jetzt wird das Paket Debianpackage.png grub-pc also wieder deinstalliert
-
-```
-apt purge grub-pc grub-pc-bin
-```
-
-und das nächste grub-Paket - Debianpackage.png grub-efi-ia32 für Systeme mit 32-bittigem (U)EFI - wird installiert
-
-```
-apt install grub-efi-ia32
-```
-
-Wieder folgt die eigentliche grub-Installation — wobei die abgefragten Konfigurationsoptionen wieder keine Rolle spielen und die Vorgaben übernommen werden können
-
-```
-grub-install --boot-directory=/boot/efi/EFI --efi-directory=/boot/efi --bootloader-id=grub --no-nvram --target=i386-efi
-```
-
-und die Deinstallation
-
-```
-apt purge grub-efi-ia32 grub-efi-ia32-bin
-```
-
-Schließlich folgt das dritte und letzte grub-Paket Debianpackage.png grub-efi-amd64 für 64-bittige (U)EFIs
-
-```
-apt install grub-efi-amd64
-```
-
-und wieder spielen die Konfigurationsoptionen keine Rolle. Wieder wird dieser grub installiert
-
-```
-ggrub-install --boot-directory=/boot/efi/EFI --efi-directory=/boot/efi --bootloader-id=grub --no-nvram
-```
-
-und hinterher das grub-Paket deinstalliert:
-
-```
-apt purge grub-efi-amd64 grub-efi-amd64-bin
-```
-
-Now edit the configuration file `/boot/efi/EFI/grub/grub.cfg` (it will be used by all variants):
+Now edit the configuration file `/efi/boot/grub/grub.cfg`
 
 ```
 search.fs_uuid 6641-AD18 root hd1,gpt1 
-set prefix=($root)'/grub'
-configfile $prefix/grub.cfg
+set prefix=($root)'/boot/grub'
+configfile $prefix/grub-manual.cfg
 ```
 
-and file `/boot/efi/grub/grub.cfg`:
+and file `/efi/boot/grub/grub-manual.cfg`:
 
 ```
 insmod part_gpt
@@ -241,10 +173,22 @@ set menu_color_highlight=black/light-gray
 
 set default=0
 
-menuentry 'Ubuntu Focal (2)' {
-        search --no-floppy --fs-uuid --set=root c40a464a-f21a-48af-b655-b1e75571788f
-        linux  /ubuntu.focal/boot/vmlinuz rootwait root=UUID=c40a464a-f21a-48af-b655-b1e75571788f rootflags=subvol=ubuntu.focal rw
-        initrd  /ubuntu.focal/boot/initrd.img
+
+
+set MPUUID="c40a464a-f21a-48af-b655-b1e75571788f"
+search --no-floppy --fs-uuid --set=root $MPUUID
+
+
+menuentry 'Ubuntu Focal' {
+        set MPSUBVOL="ubuntu.focal"
+        linux  /$MPSUBVOL/boot/vmlinuz rootwait root=UUID=$MPUUID rootflags=subvol=$MPSUBVOL rw
+        initrd  /$MPSUBVOL/boot/initrd.img
+}
+
+menuentry 'Arch Linux' {
+        set MPSUBVOL="archlinux"
+        linux  /$MPSUBVOL/boot/vmlinuz-linux rootwait root=UUID=$MPUUID rootflags=subvol=$MPSUBVOL rw
+        initrd  /$MPSUBVOL/boot/initramfs-linux.img
 }
 ```
 
