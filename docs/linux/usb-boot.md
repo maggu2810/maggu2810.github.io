@@ -104,7 +104,7 @@ btrfs subvolume create /tmp/3/ubuntu.focal
 debootstrap --arch=amd64 focal /tmp/3/ubuntu.focal/
 ```
 
-For further instructions see e.g. [bootstrap](bootsrap.md)
+For further instructions see e.g. [bootstrap](bootstrap.md)
 
 ```
 umount /tmp/3
