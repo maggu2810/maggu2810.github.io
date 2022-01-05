@@ -139,7 +139,7 @@ mount /dev/sdb1 /efi
 
 ```
 mkdir -p /efi/EFI/BOOT/
-grub-install --target=i386-pc /dev/sdb
+grub-install --target=i386-pc --boot-directory=/efi/boot /dev/sdb
 
 grub-install --target=i386-efi --boot-directory=/efi/boot --efi-directory=/efi --bootloader-id=grub --no-nvram
 mkdir -p /efi/EFI/BOOT/
