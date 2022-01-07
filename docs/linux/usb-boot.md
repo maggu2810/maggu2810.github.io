@@ -1,14 +1,56 @@
-# Short Summary
+# USB Multiboot
+
+This side describes how to create a USB stick that can boot multiple operating systems. Additionally it should work for (U)EFI and legacy BIOS systems.
+
+First let's state: It works.
+
+But there could be a problem supporting legacy BIOS systems and use big size USB sticks. So, it is not really a problem, but you need to consider it by the design of the partition layout. To summarize it shortly: The data that could be accessed by legacy BIOS on USB stick is limited by their size. I run into the problem that the BIOS of some of my machines cannot access data that is stored above the 128 GiB / 137 GB limit.
+
+Some further details could be found here:
+
+* https://tldp.org/HOWTO/Large-Disk-HOWTO-4.html
+* https://ventoy.net/en/doc_legacy_limit.html
+* https://www.easy2boot.com/faq-/a137gb-bios-bug/
+
+This could be worked around to place all files that needs to be accessed on bootup initially are places below the 128 GiB limit. For Linux systems this would be the kernel and the initramfs / initrd. All other files from root filesystem will be accessed by the kernel driver and so the limit does not exist anymore.
+
+Personally I would consider what you want to achieve. If you want to create an USB stick with multiple Linux systems using separate boot partitions could increase the initial setup. But it is all doable without big headache.
+
+As written in the first link above there could be other limits too, if you use very old machines, but I did not run into yet.
+
+## Additional lecture
 
 * https://wiki.debian.org/UEFI
 * https://www.thomas-krenn.com/en/wiki/Partition_Alignment_detailed_explanation
 * https://wiki.debianforum.de/Ein_Notfallsystem_auf_einem_USB-Stick_installieren
 
-| Partition     | Zweck                    | Größe                                                        | Partitionstyp | Name            |
-| ------------- | ------------------------ | ------------------------------------------------------------ | ------------- | --------------- |
-| »*/dev/sdb1*« | EFI System Partition     | +2G                                                          | ef00          | EFI_USBLIN      |
-| »*/dev/sdb2*« | BIOS Boot Partition      | +100M                                                        | ef02          | BIOSBOOT_USBLIN |
-| »*/dev/sdb3*« | Partition für das System | Vorgabe (gesamter noch verfügbarer Speicherplatz, mindestens ~4 GB) | 8300          | BTRFS_USBLIN    |
+
+For further information about the BIOS Boot Partition have a look at https://en.wikipedia.org/wiki/BIOS_boot_partition especially on the image.
+
+## Example partition layouts
+
+### Work around 127 GiB limit
+
+| Partition | Use Case | Size | Partition Type | Name |
+| ---- | ---- | ---- | ---- | ---- |
+| `/dev/sdb1` | EFI System Partition | +2G | ef00 | EFI_UMB |
+| `/dev/sdb2` | BIOS Boot Partition | +100M | ef02 | BIOSBOOT_UMB |
+| `/dev/sdb3` | boot directory of all linux systems | +8G | 8300 | LINBOOT_UMB |
+| `/dev/sdb4` | Windows Image 1 | +10G | 0700 | WIN1_UMB |
+| `/dev/sdb5` | Windows Image 2 | +10G | 0700 | WIN2_UMB |
+| `/dev/sdb6` | remaining stuff of all linux systems | remaining | 8300 | LIN_UMB |
+
+### No special workaround, Linux only
+
+| Partition | Use Case | Size | Partition Type | Name |
+| ---- | ---- | ---- | ---- | ---- |
+| `/dev/sdb1` | EFI System Partition | +2G | ef00 | EFI_USBLIN |
+| `/dev/sdb2` | BIOS Boot Partition | +100M | ef02 | BIOSBOOT_USBLIN |
+| `/dev/sdb3` | Linux etc. | remaining | 8300 | BTRFS_USBLIN |
+
+## Example partitioning + format
+
+Here we do not use exac
 
 ```
 # as root
