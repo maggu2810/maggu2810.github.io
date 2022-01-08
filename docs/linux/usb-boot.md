@@ -8,9 +8,9 @@ But there could be a problem supporting legacy BIOS systems and use big size USB
 
 Some further details could be found here:
 
-* https://tldp.org/HOWTO/Large-Disk-HOWTO-4.html
-* https://ventoy.net/en/doc_legacy_limit.html
-* https://www.easy2boot.com/faq-/a137gb-bios-bug/
+* [History of BIOS and IDE limits](https://tldp.org/HOWTO/Large-Disk-HOWTO-4.html)
+* [Legacy BIOS Access Range Limitation](https://ventoy.net/en/doc_legacy_limit.html)
+* [The 128Gib/137GB USB BIOS bug!](https://www.easy2boot.com/faq-/a137gb-bios-bug/)
 
 This could be worked around to place all files that needs to be accessed on bootup initially are places below the 128 GiB limit. For Linux systems this would be the kernel and the initramfs / initrd. All other files from root filesystem will be accessed by the kernel driver and so the limit does not exist anymore.
 
@@ -20,12 +20,12 @@ As written in the first link above there could be other limits too, if you use v
 
 ## Additional lecture
 
-* https://wiki.debian.org/UEFI
-* https://www.thomas-krenn.com/en/wiki/Partition_Alignment_detailed_explanation
-* https://wiki.debianforum.de/Ein_Notfallsystem_auf_einem_USB-Stick_installieren
+* [UEFI (Debian Wiki)()]https://wiki.debian.org/UEFI)
+* [Partition Alignment detailed explanation](https://www.thomas-krenn.com/en/wiki/Partition_Alignment_detailed_explanation)
+* [Ein Notfallsystem auf einem USB-Stick installieren](https://wiki.debianforum.de/Ein_Notfallsystem_auf_einem_USB-Stick_installieren)
 
 
-For further information about the BIOS Boot Partition have a look at https://en.wikipedia.org/wiki/BIOS_boot_partition especially on the image.
+For further information about the BIOS Boot Partition have a look at [BIOS boot partition (Wikipedia en)](https://en.wikipedia.org/wiki/BIOS_boot_partition) especially on the image.
 
 ## Example partition layouts
 
