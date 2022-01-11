@@ -50,7 +50,7 @@ For further information about the BIOS Boot Partition have a look at [BIOS boot 
 
 ## Example partitioning + format
 
-Here we do not use exac
+### No special BIOS workaround
 
 ```
 # as root
@@ -136,6 +136,128 @@ blkid /dev/sdb*
 /dev/sdb3: LABEL="BTRFS_USBLIN" UUID="c40a464a-f21a-48af-b655-b1e75571788f" UUID_SUB="2c90051d-92cf-468d-ba3d-fe784e216bdb" BLOCK_SIZE="4096" TYPE="btrfs" PARTLABEL="BTRFS_USBLIN" PARTUUID="14062ad2-9bf1-4d2e-b33f-c4962961d813"
 ```
 
+### No special BIOS workaround, EFI only, swap
+
+```sh
+gdisk /dev/sdb
+```
+
+```text
+GPT fdisk (gdisk) version 1.0.8
+
+Partition table scan:
+  MBR: MBR only
+  BSD: not present
+  APM: not present
+  GPT: not present
+
+
+***************************************************************
+Found invalid GPT and valid MBR; converting MBR to GPT format
+in memory. THIS OPERATION IS POTENTIALLY DESTRUCTIVE! Exit by
+typing 'q' if you don't want to convert your MBR partitions
+to GPT format!
+***************************************************************
+
+
+Warning! Secondary partition table overlaps the last partition by
+33 blocks!
+You will need to delete this partition or resize it in another utility.
+
+Command (? for help): o
+This option deletes all partitions and creates a new protective MBR.
+Proceed? (Y/N): Y
+
+Command (? for help): n
+Partition number (1-128, default 1): 
+First sector (34-500170718, default = 2048) or {+-}size{KMGTP}: 
+Last sector (2048-500170718, default = 500170718) or {+-}size{KMGTP}: +2G
+Current type is 8300 (Linux filesystem)
+Hex code or GUID (L to show codes, Enter = 8300): ef00
+Changed type of partition to 'EFI system partition'
+
+Command (? for help): n
+Partition number (2-128, default 2): 
+First sector (34-500170718, default = 4196352) or {+-}size{KMGTP}: 
+Last sector (4196352-500170718, default = 500170718) or {+-}size{KMGTP}: +32G
+Current type is 8300 (Linux filesystem)
+Hex code or GUID (L to show codes, Enter = 8300): 8200
+Changed type of partition to 'Linux swap'
+
+Command (? for help): n
+Partition number (3-128, default 3): 
+First sector (34-500170718, default = 71305216) or {+-}size{KMGTP}: 
+Last sector (71305216-500170718, default = 500170718) or {+-}size{KMGTP}: 
+Current type is 8300 (Linux filesystem)
+Hex code or GUID (L to show codes, Enter = 8300): 
+Changed type of partition to 'Linux filesystem'
+
+Command (? for help): c
+Partition number (1-3): 1
+Enter name: EFI_USBLIN
+
+Command (? for help): c
+Partition number (1-3): 2
+Enter name: SWAP_USBLIN
+
+Command (? for help): c
+Partition number (1-3): 3
+Enter name: BTRFS_USBLIN
+
+Command (? for help): wq
+
+Final checks complete. About to write GPT data. THIS WILL OVERWRITE EXISTING
+PARTITIONS!!
+
+Do you want to proceed? (Y/N): Y
+OK; writing new GUID partition table (GPT) to /dev/sdb.
+The operation has completed successfully.
+```
+
+```sh
+mkfs.vfat -n EFI_USBLIN /dev/sdb1
+mkswap -L SWAP_USBLIN /dev/sdb2
+mkfs.btrfs -L BTRFS_USBLIN /dev/sdb3
+```
+
+```sh
+blkid /dev/sdb*
+```
+
+```text
+/dev/sdb: PTUUID="192efcf3-550f-48b3-b997-3f6298eb9900" PTTYPE="gpt"
+/dev/sdb1: LABEL_FATBOOT="EFI_USBLIN" LABEL="EFI_USBLIN" UUID="BD6C-E793" BLOCK_SIZE="512" TYPE="vfat" PARTLABEL="EFI_USBLIN" PARTUUID="208d55b6-112c-4bd9-a0fd-5cb309b72fd7"
+/dev/sdb2: LABEL="SWAP_USBLIN" UUID="7ee2e029-181d-4fe6-b90f-ffcfc0a19640" TYPE="swap" PARTLABEL="SWAP_USBLIN" PARTUUID="e5f81256-52fd-4bc9-a0e6-ae22666753e3"
+/dev/sdb3: LABEL="BTRFS_USBLIN" UUID="0f7a4702-0202-4e56-b3ba-e03c180ea621" UUID_SUB="c01dfff8-89f1-4d04-b3a7-0e304e93f2d7" BLOCK_SIZE="4096" TYPE="btrfs" PARTLABEL="BTRFS_USBLIN" PARTUUID="47ba980c-87d0-4e6c-9214-7a51f036a62d"
+```
+
+```bash
+export MP_BTRFS_USBLIN=$(mktemp -d)
+mount /dev/disk/by-label/BTRFS_USBLIN "${MP_BTRFS_USBLIN}"
+btrfs subvolume create "${MP_BTRFS_USBLIN}"/ubuntu.focal
+btrfs subvolume create "${MP_BTRFS_USBLIN}"/archlinux
+umount "${MP_BTRFS_USBLIN}"
+rmdir "${MP_BTRFS_USBLIN}"
+unset MP_BTRFS_USBLIN
+```
+
+```bash
+mkdir -p /mnt/usblin_ubuntu_focal
+mount /dev/disk/by-label/BTRFS_USBLIN -o subvol=ubuntu.focal /mnt/usblin_ubuntu_focal
+mkdir -p /mnt/usblin_archlinux
+mount /dev/disk/by-label/BTRFS_USBLIN -o subvol=archlinux /mnt/usblin_archlinux
+
+# BEG: bootstrap - simple
+debootstrap --arch=amd64 focal /mnt/usblin_ubuntu_focal
+tar xzf /tmp/archlinux-bootstrap-2022.01.01-x86_64.tar.gz --numeric-owner --strip-components=1 -C /mnt/usblin_archlinux/
+# END: bootstrap - simple
+
+# TODO: setup bootstrapped simple systems (see links)
+
+umount /mnt/usblin_archlinux
+umount /mnt/usblin_ubuntu_focal
+```
+
 ## Bootstrap a Linux System
 
 Bootstrap a Linux System to a subvolume of "BTRFS_USBLIN".
@@ -176,7 +298,7 @@ Mount ESP
 
 ```
 mkdir -p /efi
-mount /dev/sdb1 /efi
+mount /dev/disk/by-label/EFI_USBLIN /efi
 ```
 
 ```

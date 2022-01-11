@@ -9,7 +9,13 @@ mkdir -p /mnt/sdb3
 mount /dev/sdb3 /mnt/sdb3
 cd /mnt/sdb3
 btrfs subvolume create archlinux
-tar xzf /home/maggu2810/Downloads/archlinux-bootstrap-2022.01.01-x86_64.tar.gz --numeric-owner --strip-components=1 -C archlinux/
+umount /mnt/sdb3
+
+mkdir -p /mnt/archlinux
+mount /dev/sdb3 -o subvol=archlinux /mnt/archlinux
+
+tar xzf /home/maggu2810/Downloads/archlinux-bootstrap-2022.01.01-x86_64.tar.gz --numeric-owner --strip-components=1 -C /mnt/archlinux
+cd /mnt/archlinux
 ```
 
 ## Mirror
@@ -17,13 +23,13 @@ tar xzf /home/maggu2810/Downloads/archlinux-bootstrap-2022.01.01-x86_64.tar.gz -
 Uncomment one mirror:
 
 ```
-vim archlinux/etc/pacman.d/mirrorlist
+vim etc/pacman.d/mirrorlist
 ```
 
 ## chroot
 
 ```
-archlinux/bin/arch-chroot archlinux/
+./bin/arch-chroot ./
 ```
 
 ## Time zone
@@ -73,6 +79,7 @@ pacman-key --populate archlinux
 
 ## Workaround while in chroot
 
+Use this only if really necessary (e.g. if you chroot not into a mount point)
 ```
 sed 's:^CheckSpace$:#CheckSpace:g' -i /etc/pacman.conf
 ```
@@ -86,7 +93,7 @@ pacman -Syu
 ## Install stuff
 
 ```
-pacman -S btrfs-progs vim networkmanager
+pacman -S --needed btrfs-progs vim networkmanager
 ```
 
 ```
