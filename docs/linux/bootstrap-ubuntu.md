@@ -150,49 +150,23 @@ apt install linux-image-generic
 
 ## Old Notes
 
-* mkdir /efi
-* apt install gnome-session gdm3 gnome-session-wayland gnome firefox
-
-```
-[maggu2810@m3800 ~]$ find /tmp/1
-/tmp/1
-/tmp/1/EFI
-/tmp/1/EFI/systemd
-/tmp/1/EFI/systemd/systemd-bootx64.efi
-/tmp/1/EFI/BOOT
-/tmp/1/EFI/BOOT/BOOTX64.EFI
-/tmp/1/EFI/Linux
-/tmp/1/loader
-/tmp/1/loader/entries
-/tmp/1/loader/entries/ubuntu.focal.conf
-/tmp/1/loader/loader.conf
-/tmp/1/loader/random-seed
-/tmp/1/b127226d796f414c97acaa74128fffe0
-/tmp/1/boot
-/tmp/1/boot/ubuntu.focal
-/tmp/1/boot/ubuntu.focal/config-5.4.0-26-generic
-/tmp/1/boot/ubuntu.focal/efi
-/tmp/1/boot/ubuntu.focal/grub
-/tmp/1/boot/ubuntu.focal/grub/unicode.pf2
-/tmp/1/boot/ubuntu.focal/grub/gfxblacklist.txt
-/tmp/1/boot/ubuntu.focal/grub/grubenv
-/tmp/1/boot/ubuntu.focal/initrd.img-5.4.0-26-generic
-/tmp/1/boot/ubuntu.focal/System.map-5.4.0-26-generic
-/tmp/1/boot/ubuntu.focal/vmlinuz-5.4.0-26-generic
-/tmp/1/boot/ubuntu.focal/initrd.img
-/tmp/1/boot/ubuntu.focal/vmlinuz
+```sh
+apt install gnome-session-wayland gnome
+# apt install gnome-session gdm3 firefox
 ```
 
+systemd-boot `.../loader/entries/ubuntu.focal.conf`
+
 ```
-[maggu2810@m3800 ~]$ cat /tmp/1/loader/entries/ubuntu.focal.conf
 title   Ubuntu Focal
 linux   /boot/ubuntu.focal/vmlinuz
 initrd  /boot/ubuntu.focal/initrd.img
 options rootwait root=UUID=f6cb8681-5db4-459a-93be-3ed99dec17bc rootflags=subvol=ubuntu.focal rw
 ```
 
+systemd-boot `.../loader/loader.conf`
+
 ```
-[maggu2810@m3800 ~]$ cat /tmp/1/loader/loader.conf
 timeout 3
 #console-mode keep
 default b127226d796f414c97acaa74128fffe0-*
