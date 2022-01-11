@@ -105,8 +105,8 @@ pacman -S --needed base linux linux-firmware
 After the bootup setup services
 
 ```
-ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 systemctl enable --now systemd-resolved.service
+ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 
 systemctl enable --now systemd-networkd.service
 
