@@ -118,7 +118,7 @@ OK; writing new GUID partition table (GPT) to /dev/sdb.
 The operation has completed successfully.
 ```
 
-Ungplug and plug in the USB stick.
+Unplug and plug in the USB stick.
 
 ```
 mkfs.vfat -n EFI_USBLIN /dev/sdb1
