@@ -1,12 +1,14 @@
 # Short Summary
 
 ```
-btrfs subvolume create /ubuntu.focal
-debootstrap --arch=amd64 focal /ubuntu.focal/
+export MPBS="/ubuntu.focal"
+
+btrfs subvolume create "${MPBS}"
+debootstrap --arch=amd64 focal "${MPBS}"
 ```
 
 ```
-systemd-nspawn -D /ubuntu.focal/ --bind-ro /etc/resolv.conf
+systemd-nspawn -D "${MPBS}" --bind-ro /etc/resolv.conf
 ```
 
 ## Inside Container
@@ -131,6 +133,10 @@ diff -Naur ubuntu.focal_03-after-reconfigure-console-data/etc/console-setup/cach
 ### install packages
 
 ```
+apt install shim-signed grub-efi-amd64-signed
+```
+
+```
 apt install vim
 ```
 
@@ -144,16 +150,37 @@ apt install network-manager
 touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
 ```
 
-```
+```sh
 apt install linux-image-generic
 ```
-
-## Old Notes
 
 ```sh
 apt install gnome-session-wayland gnome
 # apt install gnome-session gdm3 firefox
 ```
+
+### user
+
+```sh
+groupadd --system my_sudo
+echo '%my_sudo ALL=(ALL:ALL) ALL' > /etc/sudoers.d/my_sudo
+chmod 0440 /etc/sudoers.d/my_sudo
+
+export UGNAME=unpriv
+groupadd --gid 1000 "${UGNAME}"
+useradd --uid 1000 --gid "${UGNAME}" -m "${UGNAME}"
+passwd "${UGNAME}"
+
+for GRP in \
+wheel \
+my_sudo \
+adm dialout cdrom sudo dip plugdev lpadmin lxd sambashare wireshark docker \
+; do gpasswd -a "${UGNAME}" "${GRP}"; done
+
+unset UGNAME
+
+
+## Old Notes
 
 systemd-boot `.../loader/entries/ubuntu.focal.conf`
 

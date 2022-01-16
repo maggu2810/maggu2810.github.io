@@ -112,3 +112,7 @@ systemctl enable --now systemd-networkd.service
 
 systemctl enable --now NetworkManager.service
 ```
+
+## Notes
+
+AUR: https://github.com/Jguer/yay
