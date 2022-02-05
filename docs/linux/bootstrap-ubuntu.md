@@ -168,7 +168,7 @@ chmod 0440 /etc/sudoers.d/my_sudo
 
 export UGNAME=unpriv
 groupadd --gid 1000 "${UGNAME}"
-useradd --uid 1000 --gid "${UGNAME}" -m "${UGNAME}"
+useradd --uid 1000 --gid "${UGNAME}" -s /bin/bash -m "${UGNAME}"
 passwd "${UGNAME}"
 
 for GRP in \
@@ -178,6 +178,7 @@ adm dialout cdrom sudo dip plugdev lpadmin lxd sambashare wireshark docker \
 ; do gpasswd -a "${UGNAME}" "${GRP}"; done
 
 unset UGNAME
+```
 
 
 ## Old Notes
@@ -205,4 +206,6 @@ fstab
 UUID="f6cb8681-5db4-459a-93be-3ed99dec17bc" /     btrfs subvol=/ubuntu.focal 0 0
 UUID="D350-81FD"                            /efi  vfat  defaults             0 0
 /efi/boot/ubuntu.focal                      /boot none  bind                 0 0
+```
+
 ```
