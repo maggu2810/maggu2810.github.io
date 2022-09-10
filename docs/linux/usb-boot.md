@@ -260,6 +260,204 @@ umount /mnt/usblin_archlinux
 umount /mnt/usblin_ubuntu_focal
 ```
 
+### No special BIOS workaround, EFI only, no separate boot, encrypted root, swap optional
+
+gdisk partition table
+
+```sh
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1            2048         4196351   2.0 GiB     EF00  EFI_PLSDEP1
+   2         4196352      1819281407   865.5 GiB   8300  MAIN_PLSDEP1
+   3      1819281408      1953459583   64.0 GiB    8300  SWAP_PLSDEP1
+```
+
+EFI same as examples above.
+
+MAIN_PLSDEP1 will be used for encrypted rootfs (+ boot)
+
+```sh
+cryptsetup luksFormat --type luks1 /dev/sda2
+cryptsetup open /dev/sda2 MAIN_PLSDEP1
+mkfs.btrfs -L BTRFS_PLSDEP1 /dev/mapper/MAIN_PLSDEP1
+mkdir /tmp/btrfs; mount /dev/mapper/MAIN_PLSDEP1 /tmp/btrfs
+cd /tmp/btrfs
+btrfs subvolume create machines
+btrfs subvolume create machines/ubuntu.focal
+cd
+umount /tmp/btrfs
+
+# bootstrap
+mount -t btrfs -o subvol=/machines/ubuntu.focal /dev/mapper/MAIN_PLSDEP1 /tmp/ubuntu.focal/
+debootstrap focal /tmp/ubuntu.focal/
+# follow separate guide
+# before install "linux-image-generic"
+apt install cryptsetup-initramfs
+# Now /etc/crypttab should be edited - for this guide we fix it later
+```
+
+/efi/EFI/ubuntu/grub/grub.cfg 
+
+```
+insmod part_gpt
+insmod btrfs
+insmod gzio
+insmod gettext
+insmod all_video
+insmod gfxterm
+
+set menu_color_normal=white/black
+set menu_color_highlight=black/light-gray
+
+set default=0
+
+#set MPUUID="6b9599f3-3588-45d3-a4ca-d7f5f3fdb34d"
+#search --no-floppy --fs-uuid --set=root $MPUUID
+
+set CRYPTUUID="c65b3f7aea68478d896ae5cc706eaddb"
+set MPUUID="715e05a1-0172-4fe3-835e-4fe8c5904139"
+
+insmod luks
+cryptomount -u $CRYPTUUID
+search --no-floppy --fs-uuid --set=root $MPUUID
+
+
+menuentry 'Ubuntu 20.04 - Focal Fossa' {
+        set MPSUBVOL="/machines/ubuntu.focal"
+        #linux  /$MPSUBVOL/boot/vmlinuz rootwait root=UUID=$MPUUID rootflags=subvol=$MPSUBVOL rw
+        linux  /$MPSUBVOL/boot/vmlinuz cryptdevice=UUID=$MPUUIDD:main rootwait root=/dev/mapper/main rootflags=subvol=$MPSUBVOL rw
+        initrd  /$MPSUBVOL/boot/initrd.img
+}
+
+menuentry 'Ubuntu 22.04 - Jammy Jellyfish' {
+        set MPSUBVOL="/machines/ubuntu.jammy"
+        linux  /$MPSUBVOL/boot/vmlinuz rootwait root=UUID=$MPUUID rootflags=subvol=$MPSUBVOL rw
+        initrd  /$MPSUBVOL/boot/initrd.img
+}
+```
+
+As commented above crypttab has not been edited in front of initramfs creation, so you will end up in the initramfs shell. Fix it and continue:
+
+```
+cryptsetup open /dev/sda2 main
+exit
+```
+
+After the start succeeded fix the crypttab in the initramfs.
+
+```text
+/etc/crypttab
+
+# <target name>	<source device>		<key file>	<options>
+main UUID="c65b3f7a-ea68-478d-896a-e5cc706eaddb" none luks,discard
+```
+
+```sh
+update-initramfs -u -k all
+```
+
+### No special BIOS workaround, EFI only, separate boot, encrypted root, swap optional
+
+```
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1            2048         4196351   2.0 GiB     EF00  EFI_PLSDEP1
+   2         4196352        20973567   8.0 GiB     8300  BOOT_PLSDEP1
+   3        20973568      1819281407   857.5 GiB   8300  MAIN_PLSDEP1
+   4      1819281408      1953459583   64.0 GiB    8300  SWAP_PLSDEP1
+```
+
+```sh
+mkfs.btrfs -L BOOT_PLSDEP1 /dev/sdb2
+cryptsetup luksFormat --type luks2 /dev/sdb3
+cryptsetup open /dev/sdb3 MAIN_PLSDEP1
+mkfs.btrfs -L MAIN_PLSDEP1 /dev/mapper/MAIN_PLSDEP1
+
+mkdir -p /tmp/btrfs; mount /dev/mapper/MAIN_PLSDEP1 /tmp/btrfs
+cd /tmp/btrfs
+btrfs subvolume create machines
+btrfs subvolume create machines/ubuntu.focal
+cd
+umount /tmp/btrfs
+
+mkdir -p /tmp/btrfs; mount /dev/sdb2 /tmp/btrfs
+cd /tmp/btrfs
+btrfs subvolume create ubuntu.focal
+cd
+umount /tmp/btrfs
+```
+
+```
+/dev/sdb: PTUUID="928eac5b-7f03-498f-b835-69e49e038424" PTTYPE="gpt"
+/dev/sdb1: LABEL_FATBOOT="EFI_PLSDEP1" LABEL="EFI_PLSDEP1" UUID="266C-436B" BLOCK_SIZE="512" TYPE="vfat" PARTLABEL="EFI_PLSDEP1" PARTUUID="23e4eeba-96aa-479a-b3f8-63553cfdfc30"
+/dev/sdb2: LABEL="BOOT_PLSDEP1" UUID="d388dd11-f7bb-4a0c-b93f-5950ad9fc276" UUID_SUB="d6ddc6cb-c98c-440e-bb5d-1b490c24ba64" BLOCK_SIZE="4096" TYPE="btrfs" PARTLABEL="BOOT_PLSDEP1" PARTUUID="6449fe37-f31e-4f3d-a9e0-a3530e47da50"
+/dev/sdb3: UUID="ff4c7b9b-de95-4a6f-a6f9-ce35fc133191" TYPE="crypto_LUKS" PARTLABEL="MAIN_PLSDEP1" PARTUUID="60f12f6d-52c8-4d78-863a-17c2b5c47182"
+/dev/sdb4: PARTLABEL="SWAP_PLSDEP1" PARTUUID="ee7f066a-04cc-4674-afc0-d7d59f48694a"
+/dev/mapper/MAIN_PLSDEP1: LABEL="MAIN_PLSDEP1" UUID="7924d6bd-bdb1-461a-bb0e-e3f14e5e2b18" UUID_SUB="a542981e-7b80-40b5-9ea4-4b702815f961" BLOCK_SIZE="4096" TYPE="btrfs"
+```
+
+```
+# bootstrap
+mkdir -p /tmp/ubuntu.focal
+mount -t btrfs -o subvol=/machines/ubuntu.focal /dev/mapper/MAIN_PLSDEP1 /tmp/ubuntu.focal/
+mkdir -p /tmp/ubuntu.focal/boot
+mount -t btrfs -o subvol=/ubuntu.focal /dev/sdb2 /tmp/ubuntu.focal/boot
+
+debootstrap focal /tmp/ubuntu.focal/
+
+# follow separate guide
+
+# BEG: before install "linux-image-generic"
+apt install cryptsetup-initramfs
+cat <<EOF >/etc/crypttab
+# <target name>	<source device>		<key file>	<options>
+main UUID="ff4c7b9b-de95-4a6f-a6f9-ce35fc133191" none luks,discard
+EOF
+# END: before install "linux-image-generic"
+
+cat <<EOF >/etc/fstab
+UUID=d388dd11-f7bb-4a0c-b93f-5950ad9fc276 /boot      btrfs   subvol=/ubuntu.focal     0 0
+UUID=266C-436B                            /efi       vfat    noauto                   0 0
+EOF
+```
+
+/efi/EFI/ubuntu/grub/grub.cfg 
+
+```
+insmod part_gpt
+insmod btrfs
+insmod gzio
+insmod gettext
+insmod all_video
+insmod gfxterm
+
+set menu_color_normal=white/black
+set menu_color_highlight=black/light-gray
+
+set default=0
+
+menuentry 'Ubuntu 20.04 - Focal Fossa' {
+  set UUID_MAIN_ENC="ff4c7b9b-de95-4a6f-a6f9-ce35fc133191"
+  set UUID_BOOT="d388dd11-f7bb-4a0c-b93f-5950ad9fc276"
+  search --no-floppy --fs-uuid --set=root $UUID_BOOT
+  set BOOT_SUBVOL="/ubuntu.focal"
+  set MAIN_SUBVOL="/machines/ubuntu.focal"
+  linux  $BOOT_SUBVOL/vmlinuz cryptdevice=UUID=$UUID_MAIN_ENC:main rootwait root=/dev/mapper/main rootflags=subvol=$MAIN_SUBVOL rw
+  initrd  $BOOT_SUBVOL/initrd.img
+}
+```
+
+On the first initramfs generation crypttab etc. has not been setup correctly. You will end up in the initramfs shell. Fix it and continue:
+
+```
+cryptsetup open /dev/sda2 main
+exit
+```
+
+After the start succeeded regenerate the initramfs.
+
+```sh
+update-initramfs -u -k all
+```
+
 ## Bootstrap a Linux System
 
 Bootstrap a Linux System to a subvolume of "BTRFS_USBLIN".
