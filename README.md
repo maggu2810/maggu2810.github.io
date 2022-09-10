@@ -91,7 +91,6 @@ bundle install
 ```
 
 Remove temporary directory again
-```
 
 # Create new page
 
