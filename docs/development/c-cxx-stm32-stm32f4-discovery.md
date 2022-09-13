@@ -37,6 +37,8 @@ stm32f4-discovery
 
 # UART printf
 
+## Code
+
 * Open ioc file in STM32CubeMX
   * Connectivity
     * USART2
@@ -67,6 +69,8 @@ int __io_putchar(int ch)
 /* USER CODE END 0 */
 ```
 
+## Wiring
+
 Connect FTDI / Prolific / ...
 
 | Cable Type | RXD | TXD | GND |
@@ -77,6 +81,24 @@ Connect FTDI / Prolific / ...
 * RXD: PA3
 * TXD: PA2
 * GND: GND
+
+## Host Side
+
+It seems `screen` and `minicom` do not adding a carriage return on a line feed default. This result into a new line without beginning at the beginning of the line but continue new data on the next position.
+
+For `minicom` we could edit `~/.minirc.dfl` and add the following line
+
+```
+pu addcarreturn Yes
+```
+
+minicom could be started using (change the device):
+
+```
+minicom -b 115200 -D /dev/ttyUSB2 -o
+```
+
+## Lecture
 
 See also:
 * https://community.st.com/s/question/0D53W00001NvW0ZSAV/stm32g0-redirect-printf-to-write-and-use-uart-how-to
