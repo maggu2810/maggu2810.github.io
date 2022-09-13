@@ -12,3 +12,5 @@ Hello World
 ### Development
 
 * [STM32 - CLion](development/c-cxx-stm32-clion.md)
+* [STM32 - stm32f4-discovery](development/c-cxx-stm32-stm32f4-discovery.md)
+

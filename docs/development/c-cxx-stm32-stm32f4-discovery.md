@@ -1,0 +1,176 @@
+stm32f4-discovery
+==============
+
+***First steps on my first STM32 project***
+
+**Author:** *Markus Rathgeb*
+
+# Create Project - STM32CubeMX
+
+* STM32CubeMX
+* Select board
+* use default configuration for peripherals
+* Project Manager
+  * Project Settings
+    * Project Name: `stm32-first-steps`
+    * Project Location: `/.../project/parent/directory/`
+    * Toolchain / IDE: `STM32CubeIDE`
+    * Generate Under Root: enabled
+
+* Open "ioc" file in CLion
+* Open as Project
+* Open with STM32CubeMX
+  * Generate Code
+  * Close STM32CubeMX
+* OpenOCD Dialog
+  * Select Board Configuration File
+  * `stm32f4discovery.cfg`
+  * Use
+* New, File, .gitignore: [JetBrains.gitignore](https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore)
+
+# Update Heap / Stack Size
+
+* Project Manager
+  * Linker Settings:
+    * Minimum Heap Size: 0x400 (before 0x200)
+    * Minimum Stack Size: 0x800 (before 0x400)
+
+# UART printf
+
+* Open ioc file in STM32CubeMX
+  * Connectivity
+    * USART2
+      * Mode
+        * **Mode: Asynchronous**
+        * HArdware Flow Control (RS232): Disable
+      * Parameter Setting
+        * Basic Parameters
+          * Baud Rate: 115200 Bits/s
+          * Word Length: 8 Bits (including Parity)
+          * Parity: None
+          * Stop Bits: 1
+        * Advanced Parameters
+          * Data Direction: Receive and Transmit
+          * Over Sampling: 16 Samples
+  * Generate Code
+* Edit `Core/Src/main.c`
+
+```C
+/* USER CODE BEGIN 0 */
+
+int __io_putchar(int ch)
+{
+  HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 0xFFFF);
+  return ch;
+}
+
+/* USER CODE END 0 */
+```
+
+Connect FTDI / Prolific / ...
+
+| Cable Type | RXD | TXD | GND |
+| --------------------- | ------ | ------ | ----- |
+| black, yellow, orange | orange | yellow | black |
+| black, white, green   | green  | white  | black |
+
+* RXD: PA3
+* TXD: PA2
+* GND: GND
+
+See also:
+* https://community.st.com/s/question/0D53W00001NvW0ZSAV/stm32g0-redirect-printf-to-write-and-use-uart-how-to
+* https://deepbluembedded.com/stm32-debugging-with-uart-serial-print/
+
+# LED Test
+
+```
+   <3>
+<4>   <5>
+   <6>
+```
+
+* LED3: orange
+* LED4: green
+* LED5: red
+* LED6: blue
+
+`main.c` main loop (heartbeet)
+
+```C
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  uint32_t tickLast = HAL_GetTick();
+  int next_action = GPIO_PIN_SET;
+  while (1)
+  {
+    /* USER CODE END WHILE */
+    MX_USB_HOST_Process();
+
+    /* USER CODE BEGIN 3 */
+    const uint32_t tickCur = HAL_GetTick();
+    if (tickCur - tickLast >= 1000) {
+      tickLast = tickCur;
+      HAL_GPIO_WritePin(GPIOD, LD4_Pin, next_action);
+      next_action = next_action == GPIO_PIN_SET ? GPIO_PIN_RESET : GPIO_PIN_SET;
+    }
+  }
+  /* USER CODE END 3 */
+```
+
+`main.c` error handler
+
+```C
+void Error_Handler(void)
+{
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+  __disable_irq();
+  uint32_t tickLast = HAL_GetTick();
+  int next_action = GPIO_PIN_SET;
+  while (1)
+  {
+    const uint32_t tickCur = HAL_GetTick();
+    if (tickCur - tickLast >= 500)
+    {
+      tickLast = tickCur;
+      HAL_GPIO_WritePin(GPIOD, LD6_Pin, next_action);
+      next_action = next_action == GPIO_PIN_SET ? GPIO_PIN_RESET : GPIO_PIN_SET;
+    }
+  }
+  /* USER CODE END Error_Handler_Debug */
+}
+```
+
+# USB Host
+
+## Very import VBUS fix
+
+`USB_HOST/Target/usbh_platform.c`
+
+* on state == 0 change from `GPIO_PIN_RESET` to `GPIO_PIN_SET`
+* otherwise (1) change from `GPIO_PIN_SET` to `GPIO_PIN_RESET`
+
+Fixed code looks like:
+
+```C
+void MX_DriverVbusFS(uint8_t state)
+{
+  uint8_t data = state;
+  /* USER CODE BEGIN PREPARE_GPIO_DATA_VBUS_FS */
+  if(state == 0)
+  {
+    /* Drive high Charge pump */
+    data = GPIO_PIN_SET;
+  }
+  else
+  {
+    /* Drive low Charge pump */
+    data = GPIO_PIN_RESET;
+  }
+  /* USER CODE END PREPARE_GPIO_DATA_VBUS_FS */
+  HAL_GPIO_WritePin(GPIOC,GPIO_PIN_0,(GPIO_PinState)data);
+}
+```
+
+For further information see the end of: http://evenlund.blogspot.com/2016/10/usb-storage-with-stm32f4-discovery-and_58.html
