@@ -196,3 +196,34 @@ void MX_DriverVbusFS(uint8_t state)
 ```
 
 For further information see the end of: http://evenlund.blogspot.com/2016/10/usb-storage-with-stm32f4-discovery-and_58.html
+
+# CAN Bus
+
+## Configuration
+
+### Parameter Settings
+
+* Bit Timing Parameters
+  * Prescaler (for Time Quantum): 7
+  * *Time Quantum: 166.66666666...69 ns*
+  * Time Quanta in Bit Segment 1: 10 Times
+  * Time Quanta in Bit Segment 2: 1 Time
+  * *Time for one Bit: 2000 ns*
+  * *Baud Rate: 499999 bit/s*
+  * ReSynchronization Jump Width: 4 Times
+* Basic Parameters
+  * Time Triggered Communication Mode: Disable
+  * Automatic Bus-Off Management: Disable
+  * Automatic Wake-Up Mode: Disable
+  * Automatic Retransmission: Enable
+  * Receive Fifo Locked Mode: Disable
+  * Transmit Fifo Priority: Disable
+* Advanced Parameters
+  * Operating Mode: Normal
+
+### GPIO Settings
+
+| PIN Name | Signal on PIN | GPIO output level | GPIO mode                    | GPIO Pull-up/Pull-down | Maximum output speed |
+| -------- | ------------- | ----------------- | ---------------------------- | ---------------------- | -------------------- |
+| PD0      | CAN1_RX       | n/a               | Alternate Function Push Pull | Pull-up                | Very High            |
+| PD1      | CAN1_TX       | n/a               | Alternate Function Push Pull | Pull-up                | Very High            |
