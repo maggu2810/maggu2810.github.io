@@ -203,14 +203,23 @@ For further information see the end of: http://evenlund.blogspot.com/2016/10/usb
 
 ### Parameter Settings
 
+For the "CAN bit-timing" values' calculation you can use [CAN Bit Time Calculation](http://www.bittiming.can-wiki.info/)
+
+* ST Microelectronics bxCAN
+* Clock Rate: 42 MHz
+* Sample-Point: 87.5 %
+* SJW: 1
+
+STM32 CubeMX Configuration
+
 * Bit Timing Parameters
-  * Prescaler (for Time Quantum): 7
-  * *Time Quantum: 166.66666666...69 ns*
-  * Time Quanta in Bit Segment 1: 10 Times
-  * Time Quanta in Bit Segment 2: 1 Time
+  * Prescaler (for Time Quantum): 6
+  * *Time Quantum: 142.8571... ns*
+  * Time Quanta in Bit Segment 1: 11 Times
+  * Time Quanta in Bit Segment 2: 2 Time
   * *Time for one Bit: 2000 ns*
-  * *Baud Rate: 499999 bit/s*
-  * ReSynchronization Jump Width: 4 Times
+  * *Baud Rate: 500000 bit/s*
+  * ReSynchronization Jump Width: 1 Time
 * Basic Parameters
   * Time Triggered Communication Mode: Disable
   * Automatic Bus-Off Management: Disable
