@@ -11,6 +11,12 @@ Hello World
 
 ### Development
 
+#### FreeRTOS
+
+* [FreeRTOS](development/FreeRTOS.md)
+
+#### STM32
+
 * [STM32 - CLion](development/c-cxx-stm32-clion.md)
 * [STM32 - stm32f4-discovery](development/c-cxx-stm32-stm32f4-discovery.md)
 
