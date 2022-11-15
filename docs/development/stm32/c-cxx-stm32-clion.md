@@ -5,6 +5,8 @@ CLion - STM32
 
 **Author:** *Markus Rathgeb*
 
+---
+
 # Requirements
 
 See also [CLion: STM32CubeMX projects](https://www.jetbrains.com/help/clion/embedded-development.html)

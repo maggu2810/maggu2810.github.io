@@ -13,12 +13,16 @@ Hello World
 
 #### FreeRTOS
 
-* [FreeRTOS](development/FreeRTOS.md)
+* [FreeRTOS](development/FreeRTOS/FreeRTOS.md)
 
 #### STM32
 
-* [STM32 - CLion](development/c-cxx-stm32-clion.md)
-* [STM32 - stm32f4-discovery](development/c-cxx-stm32-stm32f4-discovery.md)
+* [STM32 - CLion](development/stm32/c-cxx-stm32-clion.md)
+* [STM32 - stm32f4-discovery](development/stm32/c-cxx-stm32-stm32f4-discovery.md)
+
+#### Yocto
+
+* [Yocto - Kernel Development](development/yocto/kernel-development.md)
 
 ### old
 

@@ -5,6 +5,8 @@ stm32f4-discovery
 
 **Author:** *Markus Rathgeb*
 
+---
+
 # Create Project - STM32CubeMX
 
 * STM32CubeMX
