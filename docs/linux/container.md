@@ -108,3 +108,9 @@ sudo dnf install podman podman-compose
 ```shell
 systemctl --user enable --now podman.socket
 ```
+
+## Notes
+
+### Mapping of UID / GID
+
+* https://stackoverflow.com/questions/70770437/mapping-of-user-ids
