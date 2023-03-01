@@ -8,6 +8,7 @@ Hello World
 
 * [UEFI + GPT Bootable Linux Stick](linux/usb-boot.md)
 * [bootstrap](linux/bootstrap.md)
+* [container](linux/container.md)
 
 ### Development
 
