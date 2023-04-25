@@ -7,6 +7,16 @@ OnePlus 6 / 6T
 
 ---
 
+# Introduction
+
+This currently serves as a collection of some thoughts for me.
+
+The hardware OP6 and OP6T should be very similar, so I assume the most stuff should be identical.
+
+The hardware I ordered is a OP6 and not a OP6T. So I cannot judge if the information on this site fits to both devices.
+
+Just to be on the safe side: I do not take any guarantees. Do whatever you want to do with this information. It is all your responsibility.
+
 # Codename
 
 | Device Name   | Codename  |
@@ -25,9 +35,7 @@ OnePlus 6 / 6T
   * call
   * sms
 * update to most recent  android version (so, firmware is up to date)
-* unlock bootloader
-  * [Information (LineageOS)](https://wiki.lineageos.org/devices/enchilada/install#unlocking-the-bootloader)
-  * [Information (postmarketOS)](https://wiki.postmarketos.org/wiki/OnePlus_6_(oneplus-enchilada)#Unlock_the_bootloader)
+* [Unlocking the bootloader](#unlocking-the-bootloader)
 * Ensuring all firmware partitions are consistent
   * [Information (LineageOS)](https://wiki.lineageos.org/devices/enchilada/install#ensuring-all-firmware-partitions-are-consistent)
   * [Information (XDA Developers)](https://forum.xda-developers.com/t/rom-13-lineageos-20-0-unofficial-oneplus-6-6t-gapps-ota-updates-safetynet-twrp.4494053/)
@@ -46,4 +54,36 @@ OnePlus 6 / 6T
 * try Arch Linux ARM
   * [Instructions Sonny](https://gitlab.gnome.org/sonny/op6/-/blob/main/instructions.txt)
 * test fedora minimal rootfs image using kernel from postmarketos or ALARM
-* enhance fedora rootfs image
+  * as it seems (see "Fedora Mobility" Matrix chat) Fedora userspace gets started the following could make sense to modify the rootfs so `init` is a simple script that:
+    * starts wpa_supplication with a configuration for the home WiFi (so it connects automatically to it)
+    * starts an ssh daemon
+  * enhance fedora rootfs image
+
+# Special boot modes
+
+**Recovery**: With the device powered off, hold `Volume Down` + `Power`.
+
+**Bootloader/Fastboot/Download**: With the device powered off, hold `Volume Up` + `Power`.
+
+# Unlocking the bootloader
+
+1. Enable OEM unlock in the Developer options under device Settings, if present.
+    1. Open setting, go to "About" and tap on the "Build number" box ~10 times until the "You are now a developer" toast message appears.
+    2. Go back to the main settings page, go to "System" and then "Developer options" (it might be hiding behind a dropdown menu). Toggle the switch to "Enable OEM unlocking"
+2. Connect the device to your PC via USB.
+3. Choose between the following options:
+    * On the computer, open a command prompt (on Windows) or terminal (on Linux or macOS) window, and type: `adb reboot bootloader`
+    * You can also boot into fastboot mode via a key combination: With the device powered off, hold `Volume Up` + `Power`.
+4. Once the device is in fastboot mode, verify your PC finds it by typing: `fastboot devices`
+<br/>If you don't get any output or an error:
+    * on Windows: make sure the device appears in the device manager without a triangle. Try other drivers until the command above works!
+    * on Linux or macOS: If you see no permissions fastboot try running fastboot as root. When the output is empty, check your USB cable and port!
+5. Now type the following command to unlock the bootloader: `fastboot oem unlock`
+<br>*Note: At this point the device may display on-screen prompts which will require interaction to continue the process of unlocking the bootloader. Please take whatever actions the device asks you to to proceed.*
+6. If the device doesn't automatically reboot, reboot it. It should now be unlocked.
+7. Since the device resets completely, you will need to re-enable USB debugging to continue.
+
+See also:
+
+* [Information (LineageOS)](https://wiki.lineageos.org/devices/enchilada/install#unlocking-the-bootloader)
+* [Information (postmarketOS)](https://wiki.postmarketos.org/wiki/OnePlus_6_(oneplus-enchilada)#Unlock_the_bootloader)
