@@ -61,9 +61,15 @@ Just to be on the safe side: I do not take any guarantees. Do whatever you want 
 
 # Special boot modes
 
-**Recovery**: With the device powered off, hold `Volume Down` + `Power`.
+## Recovery
 
-**Bootloader/Fastboot/Download**: With the device powered off, hold `Volume Up` + `Power`.
+* With the device powered off, hold `Volume Down` + `Power`.
+* `adb reboot recovery`
+
+## Bootloader / Fastboot / Download
+
+* With the device powered off, hold `Volume Up` + `Power`.
+* `adb reboot bootloader`
 
 # Unlocking the bootloader
 
@@ -71,9 +77,7 @@ Just to be on the safe side: I do not take any guarantees. Do whatever you want 
     1. Open setting, go to "About" and tap on the "Build number" box ~10 times until the "You are now a developer" toast message appears.
     2. Go back to the main settings page, go to "System" and then "Developer options" (it might be hiding behind a dropdown menu). Toggle the switch to "Enable OEM unlocking"
 2. Connect the device to your PC via USB.
-3. Choose between the following options:
-    * On the computer, open a command prompt (on Windows) or terminal (on Linux or macOS) window, and type: `adb reboot bootloader`
-    * You can also boot into fastboot mode via a key combination: With the device powered off, hold `Volume Up` + `Power`.
+3. [Enter Download Mode](#bootloader--fastboot--download)
 4. Once the device is in fastboot mode, verify your PC finds it by typing: `fastboot devices`
 <br/>If you don't get any output or an error:
     * on Windows: make sure the device appears in the device manager without a triangle. Try other drivers until the command above works!
