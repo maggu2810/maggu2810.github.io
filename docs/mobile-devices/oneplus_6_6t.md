@@ -52,7 +52,7 @@ Just to be on the safe side: I do not take any guarantees. Do whatever you want 
 * try Arch Linux ARM
   * [Instructions Sonny](https://gitlab.gnome.org/sonny/op6/-/blob/main/instructions.txt)
 * test fedora minimal rootfs image using kernel from postmarketos or ALARM
-  * as it seems (see "Fedora Mobility" Matrix chat) Fedora userspace gets started the following could make sense to modify the rootfs so `init` is a simple script that:
+  * as it seems (see "Fedora Mobility" Matrix chat) Fedora userspace gets started it could make sense to modify the rootfs so `init` is a simple script that:
     * starts wpa_supplication with a configuration for the home WiFi (so it connects automatically to it)
     * starts an ssh daemon
   * enhance fedora rootfs image
@@ -108,3 +108,15 @@ See also:
 
 * [Information (LineageOS)](https://wiki.lineageos.org/devices/enchilada/install#ensuring-all-firmware-partitions-are-consistent)
 * [Information (XDA Developers)](https://forum.xda-developers.com/t/rom-13-lineageos-20-0-unofficial-oneplus-6-6t-gapps-ota-updates-safetynet-twrp.4494053/)
+
+# Fedora
+
+## Setup
+
+To run aarch64 executables we need to ensure the respective qemu-user-static package is installed and binfmt is setup correctly.
+
+```
+dnf install qemu-user-static-aarch64
+```
+
+The file `/proc/sys/fs/binfmt_misc/qemu-aarch64` should exist.
