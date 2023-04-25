@@ -36,9 +36,7 @@ Just to be on the safe side: I do not take any guarantees. Do whatever you want 
   * sms
 * update to most recent  android version (so, firmware is up to date)
 * [Unlocking the bootloader](#unlocking-the-bootloader)
-* Ensuring all firmware partitions are consistent
-  * [Information (LineageOS)](https://wiki.lineageos.org/devices/enchilada/install#ensuring-all-firmware-partitions-are-consistent)
-  * [Information (XDA Developers)](https://forum.xda-developers.com/t/rom-13-lineageos-20-0-unofficial-oneplus-6-6t-gapps-ota-updates-safetynet-twrp.4494053/)
+* [Ensuring all firmware partitions are consistent](#ensuring-all-firmware-partitions-are-consistent)
 * custom android rom (optional)
   * lineageos
     * OnePlus 6: [LineageOS enchilada](https://wiki.lineageos.org/devices/enchilada/)
@@ -91,3 +89,22 @@ See also:
 
 * [Information (LineageOS)](https://wiki.lineageos.org/devices/enchilada/install#unlocking-the-bootloader)
 * [Information (postmarketOS)](https://wiki.postmarketos.org/wiki/OnePlus_6_(oneplus-enchilada)#Unlock_the_bootloader)
+
+# Ensuring all firmware partitions are consistent
+
+In some cases, the inactive slot can be unpopulated or contain much older firmware than the active slot, leading to various issues including a potential hard-brick. We can ensure none of that will happen by copying the contents of the active slot to the inactive slot.
+
+To do this, sideload the `copy-partitions-20220613-signed.zip` package by doing the following:
+
+1. Download the `copy-partitions-20220613-signed.zip` file from [here](https://mirrorbits.lineageos.org/tools/copy-partitions-20220613-signed.zip). It should have a MD5 sum of `79f2f860830f023b7030c29bfbea7737` or a SHA-256 sum of `92f03b54dc029e9ca2d68858c14b649974838d73fdb006f9a07a503f2eddd2cd`.
+2. Sideload the `copy-partitions-20220613-signed.zip` package:
+    * On the device, select "Apply Update", then "Apply from ADB" to begin sideload.
+    * On the host machine, sideload the package using: `adb sideload copy-partitions-20220613-signed.zip`
+3. Now reboot to recovery by tapping "Advanced", then "Reboot to recovery".
+
+Installing LineageOS from recovery
+
+See also:
+
+* [Information (LineageOS)](https://wiki.lineageos.org/devices/enchilada/install#ensuring-all-firmware-partitions-are-consistent)
+* [Information (XDA Developers)](https://forum.xda-developers.com/t/rom-13-lineageos-20-0-unofficial-oneplus-6-6t-gapps-ota-updates-safetynet-twrp.4494053/)
