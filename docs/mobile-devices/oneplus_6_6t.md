@@ -120,3 +120,10 @@ dnf install qemu-user-static-aarch64
 ```
 
 The file `/proc/sys/fs/binfmt_misc/qemu-aarch64` should exist.
+
+If there is something wrong, check the status end if desired restart the service.
+
+```shell
+systemctl status systemd-binfmt.service 
+systemctl restart systemd-binfmt.service
+```
