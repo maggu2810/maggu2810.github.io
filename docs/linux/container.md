@@ -114,3 +114,4 @@ systemctl --user enable --now podman.socket
 ### Mapping of UID / GID
 
 * https://stackoverflow.com/questions/70770437/mapping-of-user-ids
+* https://github.com/containers/podman/blob/main/troubleshooting.md#39-podman-run-fails-with-error-unrecognized-namespace-mode-keep-iduid1000gid1000-passed
