@@ -109,6 +109,20 @@ See also:
 * [Information (LineageOS)](https://wiki.lineageos.org/devices/enchilada/install#ensuring-all-firmware-partitions-are-consistent)
 * [Information (XDA Developers)](https://forum.xda-developers.com/t/rom-13-lineageos-20-0-unofficial-oneplus-6-6t-gapps-ota-updates-safetynet-twrp.4494053/)
 
+# Restore Partitions / Update Firmware
+
+postmarketOS installation instructions states that you should erase the dtbo partition using `fastboot erase dtbo`.
+
+> Erasing the dtbo partition will make Android (and ALL Android-based software like Ubuntu Touch or TWRP recovery) unbootable on the current slot (read this page if you're not sure what that means). You can re-flash an Android ROM via fastboot by extracting the payload.bin from the OTA zip and using a tool like android-ota-payload-extractor to get the individual partition images. It is almost never necessary to resort to extreme measures like "MSM Download tool" to reflash the device via EDL
+
+* Download full stock ROM from [oneplus.com](https://oneplus.com/support/softwareupgrade)
+* Extract stock ROM using [payload-dumper-go](https://github.com/ssut/payload-dumper-go)
+* ...
+
+See also:
+
+* [Update firmware on enchilada](https://wiki.lineageos.org/devices/enchilada/fw_update)
+
 # Fedora
 
 ## Setup
