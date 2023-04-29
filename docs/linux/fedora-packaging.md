@@ -9,6 +9,20 @@ Fedora Packaging
 
 # Notes
 
+Assume
+
+* the current directory contains exact one spec file
+* our host architecture is amd64
+* we want to build for aarch64
+
+Downloading source
+
+```shell
+spectool -g *.spec
+```
+
+Cross package creation
+
 ```shell
 fedpkg --release f38 mockbuild --mock-config fedora-38-aarch64
 ```
