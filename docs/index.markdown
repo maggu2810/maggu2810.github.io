@@ -9,6 +9,8 @@ Hello World
 * [UEFI + GPT Bootable Linux Stick](linux/usb-boot.md)
 * [bootstrap](linux/bootstrap.md)
 * [container](linux/container.md)
+* Fedora
+  * [packaging](linux/fedora-packaging.md)
 
 ### Development
 
