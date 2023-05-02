@@ -35,3 +35,4 @@ Hello World
 
 * [OnePlus 6 / 6T](mobile-devices/oneplus_6_6t.md)
 * [OnePlus 6 / 6T - Arch Linux ARM](mobile-devices/op6-instructions-alarm.md)
+* [OnePlus 6 / 6T - Fedora](mobile-devices/op6-instructions-fedora.md)
