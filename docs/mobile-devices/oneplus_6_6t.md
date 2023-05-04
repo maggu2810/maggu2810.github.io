@@ -28,12 +28,16 @@ Just to be on the safe side: I do not take any guarantees. Do whatever you want 
 
 * order a OnePlus 6 / 6T (e.g. ebay)
 * check if all is working
-  * charging
   * touch
   * display
   * sound
   * call
   * sms
+  * usb type c jack
+    * charging
+    * data connection
+      * file transfer
+      * adb
 * update to most recent  android version (so, firmware is up to date)
 * [Unlocking the bootloader](#unlocking-the-bootloader)
 * [Ensuring all firmware partitions are consistent](#ensuring-all-firmware-partitions-are-consistent)
