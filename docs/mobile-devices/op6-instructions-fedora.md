@@ -51,7 +51,7 @@ Using the hooks, we could takeover the initramfs logic and integrate all the ste
 
 After the switch_root has been executed, I have to analyze why the bootup stucks.
 
-So, let's enable ssh daemon (we already have an kernel set IP address, so no need to wait for network target or similar) as early as possible:
+So, let's enable ssh daemon (we already have a kernel set IP address, so no need to wait for network target or similar) as early as possible:
 
 Add to the rootfs something like that
 
@@ -140,7 +140,7 @@ Not found on https://packages.fedoraproject.org/
 
 TEMPORARY TO REMEMBER MYSELF!!
 
-I am using podman to create the Fedora rootfs content and some adjustments, so the Containerfile is of interest, too.
+I am using podman to create the Fedora rootfs content and some adjustments, so the [Containerfile](https://github.com/maggu2810/op6-containers/blob/main/fedora/device/Containerfile) is of interest, too.
 
 
 ```shell
