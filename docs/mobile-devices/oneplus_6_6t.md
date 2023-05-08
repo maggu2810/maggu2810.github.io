@@ -38,7 +38,7 @@ Just to be on the safe side: I do not take any guarantees. Do whatever you want 
     * data connection
       * file transfer
       * adb
-* update to most recent  android version (so, firmware is up to date)
+* update to most recent android version (so, firmware is up to date)
 * [Unlocking the bootloader](#unlocking-the-bootloader)
 * [Ensuring all firmware partitions are consistent](#ensuring-all-firmware-partitions-are-consistent)
 * custom android rom (optional)
