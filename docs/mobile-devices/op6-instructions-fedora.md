@@ -49,6 +49,24 @@ I read the postmarketOS initramfs and I like it approach. It does some good thin
 
 Using the hooks, we could takeover the initramfs logic and integrate all the steps after the hooks to a custom hook and provide information to the framebuffer...
 
+Just an example to get rid of the pbsplash to show kernel messages again (if enabled):
+
+```shell
+$ cat /hooks-extra/001.sh
+```
+
+```shell
+#!/bin/sh
+
+. /init_functions.sh
+source_deviceinfo
+
+killall pbsplash 2>/dev/null
+while pgrep pbsplash >/dev/null; do
+  sleep 0.01
+done
+```
+
 After the switch_root has been executed, I have to analyze why the bootup stucks.
 
 So, let's enable ssh daemon (we already have a kernel set IP address, so no need to wait for network target or similar) as early as possible:
