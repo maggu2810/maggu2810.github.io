@@ -225,7 +225,13 @@ sudo mount "${DEV_BOOT}" mnt/boot
 podman export fedora-aarch64-device.c | sudo tar -C mnt/ -xp
 ```
 
-#### fedora image
+#### OLD: fedora image
+
+This has been an alternative to the container approach.
+
+Kept for information only!
+
+**obsolete**, because the adjustment done in Containerfile must be done again
 
 ```shell
 # download https://kojipkgs.fedoraproject.org/compose/38/latest-Fedora-38/compose/Spins/aarch64/images/Fedora-Phosh-38-1.6.aarch64.raw.xz
@@ -239,6 +245,8 @@ sudo cp -ax f_mnt/root/* mnt/
 sudo umount f_mnt
 sudo kpartx -d "${F_IMG_PATH}"
 ```
+
+#### generic
 
 ```shell
 sudo cp -avx /home/maggu2810/.local/var/pmbootstrap/chroot_rootfs_oneplus-enchilada/boot/* mnt/boot/
