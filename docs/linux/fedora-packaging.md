@@ -27,6 +27,50 @@ Cross package creation
 fedpkg --release f38 mockbuild --mock-config fedora-38-aarch64
 ```
 
+```shell
+#!/bin/bash
+
+for DIR in qrtr pd-mapper qbootctl #rmtfs tqftpserv
+do
+  pushd "${DIR}"
+  spectool -g *.spec
+  fedpkg --release f38 mockbuild --mock-config ./fedora-38-aarch64-specific.cfg
+  popd
+done
+```
+
+```shell
+cat qrtr/fedora-38-aarch64-specific.cfg 
+```
+
+```text
+include('fedora-38-aarch64.cfg')
+
+config_opts['createrepo_on_rpms'] = True
+```
+
+```shell
+cat pd-mapper/fedora-38-aarch64-specific.cfg 
+```
+
+```text
+include('fedora-38-aarch64.cfg')
+
+config_opts['createrepo_on_rpms'] = True
+
+#config_opts['nspawn_args'] = config_opts['nspawn_args'] + ['--bind-ro=/home/maggu2810/workspace/projects/linux-mobile/op6/fedora-container/rpms/qrtr/results_qrtr/1.0/1.fc38:/repo/qrtr']
+config_opts['nspawn_args'] = config_opts['nspawn_args'] + ['--bind-ro=../qrtr/results_qrtr/1.0/1.fc38:/repo/qrtr']
+
+config_opts['dnf.conf'] = config_opts['dnf.conf'] + """
+[qrtr]
+name=qrtr
+gpgcheck=0
+enabled=1
+baseurl=file:///repo/qrtr
+skip_if_unavailable=False
+"""
+```
+
 # Links
 
 * [Cross Compile Kernel](https://discussion.fedoraproject.org/t/how-does-one-cross-compile-the-fedora-kernel/72574/5)
