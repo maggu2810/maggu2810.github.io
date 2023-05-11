@@ -17,6 +17,7 @@ truncate -s 5G "${IMG_PATH}"
 
 export DEV_IMG="$(sudo losetup -P -f "${IMG_PATH}" -b 4096 --show)"
 
+echo "### create partitions"
 
 sudo parted -s "${DEV_IMG}" mktable msdos
 sudo parted -s "${DEV_IMG}" mkpart primary ext2 2048s 256M
@@ -26,21 +27,27 @@ sudo parted -s "${DEV_IMG}" set 1 boot on
 export DEV_BOOT="${DEV_IMG}p1"
 export DEV_ROOT="${DEV_IMG}p2"
 
+echo "### format partitions"
+
 sudo mkfs.ext4 -O ^metadata_csum -F -q -L pmOS_root -N 100000 "${DEV_ROOT}"
 sudo mkfs.ext2 -F -q -L pmOS_boot "${DEV_BOOT}"
 
+echo "### mount fs"
 
 mkdir -p mnt
 sudo mount "${DEV_ROOT}" mnt
 sudo mkdir -p mnt/boot
 sudo mount "${DEV_BOOT}" mnt/boot
 
+echo "### unpack container"
 
 podman export fedora-aarch64-device.c | sudo tar -C mnt/ -xp
 
+echo "### copy boot image"
 
 cp mnt/boot/boot.img boot.img
 
+echo "### umount"
 
 sudo umount mnt/boot
 sudo umount mnt
@@ -48,10 +55,12 @@ sudo umount mnt
 
 sudo losetup -d "${DEV_IMG}"
 
+echo "### create android sparse image"
 
 img2simg oneplus-enchilada-fedora.{img,simg}
 mv oneplus-enchilada-fedora.{simg,img}
 
+echo "### flash"
 
 fastboot erase --slot=all system
 fastboot erase userdata
