@@ -7,6 +7,60 @@ OnePlus 6: Fedora
 
 ---
 
+# Current short instructions
+
+```shell
+export IMG_PATH="${PWD}/oneplus-enchilada-fedora.img"
+rm -rf "${IMG_PATH}"
+truncate -s 5G "${IMG_PATH}"
+
+
+export DEV_IMG="$(sudo losetup -P -f "${IMG_PATH}" -b 4096 --show)"
+
+
+sudo parted -s "${DEV_IMG}" mktable msdos
+sudo parted -s "${DEV_IMG}" mkpart primary ext2 2048s 256M
+sudo parted -s "${DEV_IMG}" mkpart primary 256M 100%
+sudo parted -s "${DEV_IMG}" set 1 boot on
+
+export DEV_BOOT="${DEV_IMG}p1"
+export DEV_ROOT="${DEV_IMG}p2"
+
+sudo mkfs.ext4 -O ^metadata_csum -F -q -L pmOS_root -N 100000 "${DEV_ROOT}"
+sudo mkfs.ext2 -F -q -L pmOS_boot "${DEV_BOOT}"
+
+
+mkdir -p mnt
+sudo mount "${DEV_ROOT}" mnt
+sudo mkdir -p mnt/boot
+sudo mount "${DEV_BOOT}" mnt/boot
+
+
+podman export fedora-aarch64-device.c | sudo tar -C mnt/ -xp
+
+
+cp mnt/boot/boot.img boot.img
+
+
+sudo umount mnt/boot
+sudo umount mnt
+
+
+sudo losetup -d "${DEV_IMG}"
+
+
+img2simg oneplus-enchilada-fedora.{img,simg}
+mv oneplus-enchilada-fedora.{simg,img}
+
+
+fastboot erase --slot=all system
+fastboot erase userdata
+fastboot erase --slot=all boot
+fastboot erase dtbo
+fastboot flash boot --slot=all boot.img
+fastboot flash userdata oneplus-enchilada-fedora.img
+```
+
 # Introduction
 
 After receiving my OnePlus 6 I first tried the postmarketOS distribution.
@@ -249,7 +303,7 @@ This has been an alternative to the container approach.
 
 Kept for information only!
 
-**obsolete**, because the adjustment done in Containerfile must be done again
+**obsolete** because the adjustment done in Containerfile must be done again
 
 ```shell
 # download https://kojipkgs.fedoraproject.org/compose/38/latest-Fedora-38/compose/Spins/aarch64/images/Fedora-Phosh-38-1.6.aarch64.raw.xz
@@ -264,7 +318,9 @@ sudo umount f_mnt
 sudo kpartx -d "${F_IMG_PATH}"
 ```
 
-#### generic
+#### OLD: generic
+
+**obsolete** done on container creation
 
 ```shell
 sudo cp -avx /home/maggu2810/.local/var/pmbootstrap/chroot_rootfs_oneplus-enchilada/boot/* mnt/boot/
@@ -272,7 +328,11 @@ sudo cp -avx /home/maggu2810/.local/var/pmbootstrap/chroot_rootfs_oneplus-enchil
 sudo cp -avx /home/maggu2810/.local/var/pmbootstrap/chroot_rootfs_oneplus-enchilada/lib/firmware/* mnt/lib/firmware/
 ```
 
-### initramfs
+### OLD: initramfs
+
+**obsolete** there is no need for
+
+Keep the information to remember how to modify the extra and add hooks
 
 ```shell
 rm -rf initramfs
@@ -305,7 +365,8 @@ sudo losetup -d "${DEV_IMG}"
 ### create android sparse image
 
 ```shell
-img2simg oneplus-enchilada-fedora.img oneplus-enchilada-fedora.simg
+img2simg oneplus-enchilada-fedora.{img,simg}
+mv oneplus-enchilada-fedora.{simg,img}
 ```
 
 # ...
@@ -341,6 +402,37 @@ androidboot.verifiedbootstate=orange androidboot.keymaster=1 root=PARTUUID=19cc2
 [unpriv@fedora ~]$ cat /etc/fstab 
 /dev/mapper/sda17p2 / ext4 rw,relatime 0 0
 
+```
+
+## Create
+
+```shell
+echo "${HOME}/.local/var/pmbootstrap"'
+edge
+oneplus
+enchilada
+y
+unpriv
+none
+n
+none
+y
+C.UTF-8
+oneplus6
+n
+y' | pmbootstrap init
+pmbootstrap install
+pmbootstrap export
+install android-tools for simg2img
+simg2img /tmp/postmarketOS-export/oneplus-enchilada.img oneplus-enchilada.img
+export IMG_PATH="${PWD}/oneplus-enchilada.img"
+mkdir root
+sudo mount /dev/loop0p2 root
+sudo mount /dev/loop0p1 root/boot
+sudo tar czpf oneplus-enchilada.tgz -C root/ .
+sudo umount root/boot root/
+rmdir root
+rm oneplus-enchilada.img
 ```
 
 # Notes
