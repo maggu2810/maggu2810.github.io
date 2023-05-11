@@ -320,19 +320,23 @@ chmod +x mkbootimg.sh
   -k mnt/boot/vmlinuz \
   -o "${PWD}/mainline-boot.img"
 
-
-mkdir -p "${HOME}"/pmos
-./mkbootimg.sh \
-  -d /boot/dtbs/qcom/sdm845-oneplus-enchilada.dtb \
-  -r /boot/initrd.img-6.2.0-sdm845 \
-  -k /boot/vmlinuz-6.2.0-sdm845 \
-  -c root=/dev/sda17
+# no kernel command line customization ATM using -c e.g. -c root=/dev/sda17 (if using different image layout)
 ```
 
 ```
 mkbootimg.sh: Appending dtb "./mnt/boot/dtbs/qcom/sdm845-oneplus-enchilada.dtb" to image "./mnt/boot/vmlinuz"
 mkbootimg 	--base '0x00000000' 	--kernel_offset '0x00008000' 	--ramdisk_offset '0x01000000' 	--tags_offset '0x00000100' 	--pagesize '4096' 	--second_offset '0x00f00000' 	--cmdline " " 	--os_patch_level 2019-09-21 	--kernel /tmp/kernel-dtb -o '/home/maggu2810/pmos/mainline-boot.img' --ramdisk mnt/boot/initramfs
 mkbootimg.sh: Boot image at /home/maggu2810/pmos/mainline-boot.img
+
+
+####
+cmdline using
+mkbootimgs.sh without "-c ..."
+and
+uname -a: Linux fedora 6.2.0-sdm845 #2-postmarketos-qcom-sdm845 SMP PREEMPT Tue Mar 14 00:05:59 UTC  aarch64 GNU/Linux
+
+androidboot.verifiedbootstate=orange androidboot.keymaster=1 root=PARTUUID=19cc22c8-45f4-27de-fa05-9f48999ec5d3 androidboot.bootdevice=1d84000.ufshc androidboot.fstab_suffix=default androidboot.serialno=083b54e9 androidboot.baseband=msm msm_drm.dsi_display0=dsi_samsung_sofef00_m_cmd_display: androidboot.slot_suffix=_a skip_initramfs rootwait ro init=/init androidboot.dtb_idx=-1347440721 panel_type=black androidboot.mode=normal androidboot.recoveryreason=000 androidboot.project_name=17819 androidboot.project_codename=enchilada ddr_manufacture_info=Samsung ddr_row0_info=16 androidboot.hw_version=22 androidboot.rf_version=32 androidboot.prj_version=0 androidboot.platform_id=321 androidboot.platform_name=SDM845 androidboot.startupmode=pon1 androidboot.enable_dm_verity=1 androidboot.at_location=factory androidboot.power_cut_test=0 androidboot.secboot=enabled androidboot.battery.absent=false androidboot.rpmb_enable=true androidboot.type=normal androidboot.product.hardware.sku=3 androidboot.init_log_level=49 androidboot.cust=0 androidboot.prmec=true androidboot.opcarrier=none androidboot.bootcount=1919247457
+####
 
 [unpriv@fedora ~]$ cat /etc/fstab 
 /dev/mapper/sda17p2 / ext4 rw,relatime 0 0
