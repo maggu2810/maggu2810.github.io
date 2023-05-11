@@ -52,20 +52,28 @@ echo "### umount"
 sudo umount mnt/boot
 sudo umount mnt
 
+echo "### force sync"
+sudo sync
+
+echo "### remove loop device"
 
 sudo losetup -d "${DEV_IMG}"
+
+echo "### force sync"
+sudo sync
 
 echo "### create android sparse image"
 
 img2simg oneplus-enchilada-fedora.{img,simg}
+sudo sync
 mv oneplus-enchilada-fedora.{simg,img}
 
 echo "### flash"
 
-fastboot erase --slot=all system
-fastboot erase userdata
-fastboot erase --slot=all boot
-fastboot erase dtbo
+#fastboot erase --slot=all system
+#fastboot erase userdata
+#fastboot erase --slot=all boot
+#fastboot erase dtbo
 fastboot flash boot --slot=all boot.img
 fastboot flash userdata oneplus-enchilada-fedora.img
 ```
