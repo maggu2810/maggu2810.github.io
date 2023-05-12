@@ -131,6 +131,7 @@ See also:
 
 * [SDM845 Mainlining](https://wiki.postmarketos.org/wiki/SDM845_Mainlining)
 * [Qualcomm Snapdragon 845 (SDM845)](https://wiki.postmarketos.org/wiki/Qualcomm_Snapdragon_845_(SDM845))
+* [GitLab: Qualcomm Snapdragon 845 Mainline](https://gitlab.com/sdm845-mainline/)
 
 # Fedora
 
