@@ -10,6 +10,11 @@ OnePlus 6: Fedora
 # Current short instructions
 
 ```shell
+podman pull docker.io/maggu2810/op6-fedora-phosh:latest
+podman container create --arch "aarch64" -it --name "op6-fedora-phosh" "docker.io/maggu2810/op6-fedora-phosh:latest"
+```
+
+```shell
 export IMG_PATH="${PWD}/oneplus-enchilada-fedora.img"
 rm -rf "${IMG_PATH}"
 truncate -s 5G "${IMG_PATH}"
@@ -41,7 +46,7 @@ sudo mount "${DEV_BOOT}" mnt/boot
 
 echo "### unpack container"
 
-podman export fedora-aarch64-device.c | sudo tar -C mnt/ -xp
+podman export op6-fedora-phosh | sudo tar -C mnt/ -xp
 
 echo "### copy boot image"
 
