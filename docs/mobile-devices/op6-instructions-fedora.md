@@ -48,6 +48,10 @@ echo "### unpack container"
 
 podman export op6-fedora-phosh | sudo tar -C mnt/ -xp
 
+echo "### modify content"
+
+echo 'oneplus6' | sudo tee mnt/etc/hostname
+
 echo "### copy boot image"
 
 cp mnt/boot/boot.img boot.img
