@@ -50,7 +50,12 @@ podman export op6-fedora-phosh | sudo tar -C mnt/ -xp
 
 echo "### modify content"
 
+# hostname
 echo 'oneplus6' | sudo tee mnt/etc/hostname
+
+# prevent systemd to think we are running in a container
+# see systemd, file: "./src/basic/virt.c", func: "detect_container_files"
+sudo rm -rf mnt/run/.containerenv mnt/.dockerenv 
 
 echo "### copy boot image"
 
