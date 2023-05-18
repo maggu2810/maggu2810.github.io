@@ -55,7 +55,11 @@ echo 'oneplus6' | sudo tee mnt/etc/hostname
 
 # prevent systemd to think we are running in a container
 # see systemd, file: "./src/basic/virt.c", func: "detect_container_files"
-sudo rm -rf mnt/run/.containerenv mnt/.dockerenv 
+sudo rm -rf mnt/run/.containerenv mnt/.dockerenv
+
+# /run is a volatile path
+sudo rm -rf mnt/run/
+sudo install -o 0 -g 0 -m 0755 -d mnt/run/
 
 echo "### copy boot image"
 
