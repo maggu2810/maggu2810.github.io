@@ -203,7 +203,7 @@ Not found on https://packages.fedoraproject.org/
     * It is required for userspace applications to access the various remote processors (Wi-Fi, modem, sensors...) on
       recent Qualcomm SoCs using the QRTR protocol.
     * ?? pd-mapper is some other funky shit. embedded platform go brrr ??
-* rmtfs (todo)
+* rmtfs (done)
     * https://github.com/andersson/rmtfs
         * copr: missing
     * Qualcomm Remote Filesystem Service Implementation
@@ -213,7 +213,7 @@ Not found on https://packages.fedoraproject.org/
         * copr: jforbes/fedora-x13s
     * Qualcomm IPC Router support
     * Userspace reference for net/qrtr in the Linux kernel
-* tqftpserv (todo)
+* tqftpserv (done)
     * https://github.com/andersson/tqftpserv.git
         * copr: missing
     * Trivial File Transfer Protocol server over AF_QIPCRTR
