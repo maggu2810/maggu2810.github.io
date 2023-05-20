@@ -120,9 +120,11 @@ first use the postmarketOS kernel and replace the postmarketOS rootfs by Fedora 
 
 To not change the kernel I use the same "userdata format" as postmarketOS.
 
-For the OP6 userdata contains a msdos partition table with two partitions, one for boot and one for root (see [https://wiki.postmarketos.org/wiki/Partition_Layout](https://wiki.postmarketos.org/wiki/Partition_Layout)).
+For the OP6 userdata contains a msdos partition table with two partitions, one for boot and one for root (
+see [https://wiki.postmarketos.org/wiki/Partition_Layout](https://wiki.postmarketos.org/wiki/Partition_Layout)).
 
-I did the same keep boot as it is, filled a rootfs with Fedora rootfs and copied firmware and modules from the postmarketOS rootfs.
+I did the same keep boot as it is, filled a rootfs with Fedora rootfs and copied firmware and modules from the
+postmarketOS rootfs.
 
 It worked a little bit but not as expected.
 
@@ -130,13 +132,14 @@ So, I did some further diagnosis...
 
 I read the postmarketOS initramfs and I like it approach. It does some good things:
 
-* setup the USB-C jack to act as gadget, assign IP address and provide a DHCP server 
+* setup the USB-C jack to act as gadget, assign IP address and provide a DHCP server
 * find and mount filesystems
 * execute hooks from a initramfs-extra that is stored in the /boot partitions
 * add some information on the framebuffer
 * switch root
 
-Using the hooks, we could takeover the initramfs logic and integrate all the steps after the hooks to a custom hook and provide information to the framebuffer...
+Using the hooks, we could takeover the initramfs logic and integrate all the steps after the hooks to a custom hook and
+provide information to the framebuffer...
 
 Just an example to get rid of the pbsplash to show kernel messages again (if enabled):
 
@@ -158,7 +161,8 @@ done
 
 After the switch_root has been executed, I have to analyze why the bootup stucks.
 
-So, let's enable ssh daemon (we already have a kernel set IP address, so no need to wait for network target or similar) as early as possible:
+So, let's enable ssh daemon (we already have a kernel set IP address, so no need to wait for network target or similar)
+as early as possible:
 
 Add to the rootfs something like that
 
@@ -229,7 +233,7 @@ Not found on https://packages.fedoraproject.org/
         * enable system service op6/src/mark-boot-successful.service
 * kernel package to sync postmarketOS kernel
 * linux-firmware-oneplus6
-  * https://gitlab.com/sdm845-mainline/firmware-oneplus-sdm845
+    * https://gitlab.com/sdm845-mainline/firmware-oneplus-sdm845
 
 ## Check Build Configuration etc.
 
@@ -247,8 +251,9 @@ Not found on https://packages.fedoraproject.org/
 
 TEMPORARY TO REMEMBER MYSELF!!
 
-I am using podman to create the Fedora rootfs content and some adjustments, so the [Containerfile](https://github.com/maggu2810/op6-containers/blob/main/fedora/device/Containerfile) is of interest, too.
-
+I am using podman to create the Fedora rootfs content and some adjustments, so
+the [Containerfile](https://github.com/maggu2810/op6-containers/blob/main/fedora/device/Containerfile) is of interest,
+too.
 
 ```shell
 oneplus-enchilada:/home/user# parted -a opt /dev/sda17
@@ -690,4 +695,143 @@ oneplus-enchilada:/home/user# blkid | sort -V
 /dev/sdf4: PARTLABEL="fsg" PARTUUID="cc233967-e1f4-7974-355b-44436976bf64"
 /dev/sdf5: PARTLABEL="fsc" PARTUUID="81813b42-bc01-6ba0-2486-72dbb3c8d231"
 /dev/zram0: LABEL="zram_swap" UUID="cb228574-bb8f-407c-9624-f913b7fa4733" TYPE="swap"
+```
+
+# PMOS + Fedora parallel
+
+Idea: Using btrfs, subvolumes, change default subvolume we should be able to run PMOS and Fedora on the same phone with
+the ability to switch between the systems on reboot (after changing the default btrfs subvolume).
+
+## Install PMOS
+
+```shell
+pmbootstrap init
+pmbootstrap install --filesystem btrfs
+pmbootstrap export pmos
+
+#fastboot erase --slot=all system
+#fastboot erase userdata
+#fastboot erase --slot=all boot
+#fastboot erase dtbo
+fastboot flash boot --slot=all pmos/boot.img
+fastboot flash userdata pmos/oneplus-enchilada.img
+```
+
+## Setup PMOS on Phone
+
+* start the system
+* login into the UI
+* enable WiFi
+* enable SSH service on every boot
+  * open console
+  * `sudo rc-update add sshd`
+
+## Create Fedora rootfs subvolume
+
+```shell
+ssh-keygen -R 172.16.42.1; ssh maggu2810@172.16.42.1
+
+sudo bash
+
+apk update
+apk upgrade
+
+apk add podman
+
+echo 'maggu2810:100000:65536' > /etc/subuid
+echo 'maggu2810:100000:65536' > /etc/subgid
+
+mount --make-rshared /
+
+exit
+
+podman system migrate
+
+
+podman pull docker.io/maggu2810/op6-fedora-phosh:latest
+podman container create --arch "aarch64" -it --name "op6-fedora-phosh" "docker.io/maggu2810/op6-fedora-phosh:latest"
+
+sudo btrfs subvolume create /fedora
+
+podman export op6-fedora-phosh | sudo tar -C /fedora/ -xp
+
+echo 'oneplus6' | sudo tee /fedora/etc/hostname
+sudo rm -rf /fedora/run/.containerenv /fedora/.dockerenv
+sudo rm -rf /fedora/run/
+sudo install -o 0 -g 0 -m 0755 -d /fedora/run/
+```
+
+## PMOS to Fedora
+
+```shell
+sudo btrfs subvolume set-default 256 /
+# now reboot the phone
+sudo reboot
+```
+
+## Fedora to PMOS
+
+```shell
+sudo btrfs subvolume set-default 5 /
+# now reboot the phone
+sudo systemctl reboot
+```
+
+## Notes
+
+```text
+todo:
+
+* WARN[0000] "/" is not a shared mount, this could cause issues or missing mounts with rootless containers 
+
+
+btrfs inspect-internal rootid /
+5
+oneplus6:/home/maggu2810# btrfs subvolume list -a -t /
+ID	gen	top level	path	
+--	---	---------	----	
+256	97	5		fedora
+
+
+oneplus6:/home/maggu2810# btrfs subvolume show /
+/
+	Name: 			<FS_TREE>
+	UUID: 			d418319a-d02f-4e7f-a196-7deb09fc2922
+	Parent UUID: 		-
+	Received UUID: 		-
+	Creation time: 		2023-05-20 19:10:01 +0200
+	Subvolume ID: 		5
+	Generation: 		97
+	Gen at creation: 	0
+	Parent ID: 		0
+	Top level ID: 		0
+	Flags: 			-
+	Send transid: 		0
+	Send time: 		2023-05-20 19:10:01 +0200
+	Receive transid: 	0
+	Receive time: 		-
+	Snapshot(s):
+oneplus6:/home/maggu2810# btrfs subvolume show /fedora
+fedora
+	Name: 			fedora
+	UUID: 			e7d1b9b6-1029-244c-851b-4ee8da34066d
+	Parent UUID: 		-
+	Received UUID: 		-
+	Creation time: 		2023-05-20 22:29:01 +0200
+	Subvolume ID: 		256
+	Generation: 		97
+	Gen at creation: 	90
+	Parent ID: 		5
+	Top level ID: 		5
+	Flags: 			-
+	Send transid: 		0
+	Send time: 		2023-05-20 22:29:01 +0200
+	Receive transid: 	0
+	Receive time: 		-
+	Snapshot(s):
+
+
+oneplus6:/home/maggu2810# btrfs subvolume get-default /
+ID 5 (FS_TREE)
+
 ```
