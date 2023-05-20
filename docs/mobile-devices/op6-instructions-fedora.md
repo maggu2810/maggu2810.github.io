@@ -834,4 +834,12 @@ fedora
 oneplus6:/home/maggu2810# btrfs subvolume get-default /
 ID 5 (FS_TREE)
 
+
+
+https://github.com/containers/buildah/issues/3726
+findmnt -o PROPAGATION /
+# should be "shared" is "private"
+sudo mount --make-rshared /
+
+
 ```
