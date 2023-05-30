@@ -15,6 +15,12 @@ podman container create --arch "aarch64" -it --name "op6-fedora-phosh" "docker.i
 ```
 
 ```shell
+podman pull docker.io/maggu2810/op6-fedora:latest
+podman container rm "op6-fedora"
+podman container create --arch "aarch64" -it --name "op6-fedora" "docker.io/maggu2810/op6-fedora:latest"
+```
+
+```shell
 export IMG_PATH="${PWD}/oneplus-enchilada-fedora.img"
 rm -rf "${IMG_PATH}"
 truncate -s 5G "${IMG_PATH}"
@@ -34,41 +40,81 @@ export DEV_ROOT="${DEV_IMG}p2"
 
 echo "### format partitions"
 
-sudo mkfs.ext4 -O ^metadata_csum -F -q -L pmOS_root -N 100000 "${DEV_ROOT}"
+#sudo mkfs.ext4 -O ^metadata_csum -F -q -L pmOS_root -N 100000 "${DEV_ROOT}"
+sudo mkfs.btrfs -f -L pmOS_root "${DEV_ROOT}"
 sudo mkfs.ext2 -F -q -L pmOS_boot "${DEV_BOOT}"
 
 echo "### mount fs"
 
 mkdir -p mnt
-sudo mount "${DEV_ROOT}" mnt
-sudo mkdir -p mnt/boot
-sudo mount "${DEV_BOOT}" mnt/boot
+sudo mount -o subvolid=5 "${DEV_ROOT}" mnt
+sudo btrfs subvolume create mnt/pmos
+sudo btrfs subvolume create mnt/fedora
+sudo btrfs subvolume set-default mnt/fedora
+sudo install -d -o 0 -g 0 -m 0755 mnt/fedora/boot
+sudo install -d -o 0 -g 0 -m 0755 mnt/fedora/sda17p2
+sudo install -d -o 0 -g 0 -m 0755 mnt/pmos/boot
+sudo install -d -o 0 -g 0 -m 0755 mnt/pmos/sda17p2
+sudo mount "${DEV_BOOT}" mnt/pmos/boot
 
-echo "### unpack container"
+echo "### fedora: unpack container"
 
-podman export op6-fedora-phosh | sudo tar -C mnt/ -xp
+#podman export op6-fedora-phosh | sudo tar -C mnt/fedora/ -xp
+podman export op6-fedora | sudo tar -C mnt/fedora/ -xp
 
-echo "### modify content"
+echo "### fedora: modify content"
+
+# TODO: update tools
+sudo cp /home/maggu2810/workspace/projects/linux-mobile/op6/op6-fedora-pmos/bin/* mnt/fedora/usr/bin/
 
 # hostname
-echo 'oneplus6' | sudo tee mnt/etc/hostname
+echo 'oneplus6' | sudo tee mnt/fedora/etc/hostname
 
 # prevent systemd to think we are running in a container
 # see systemd, file: "./src/basic/virt.c", func: "detect_container_files"
-sudo rm -rf mnt/run/.containerenv mnt/.dockerenv
+sudo rm -rf mnt/fedora/run/.containerenv mnt/fedora/.dockerenv
 
 # /run is a volatile path
-sudo rm -rf mnt/run/
-sudo install -o 0 -g 0 -m 0755 -d mnt/run/
+sudo rm -rf mnt/fedora/run/
+sudo install -o 0 -g 0 -m 0755 -d mnt/fedora/run/
+
+# fstab
+echo '/dev/mapper/sda17p2  /         btrfs  rw,relatime,subvol=/fedora  0 0' | sudo tee -a mnt/fedora/etc/fstab
+echo '/dev/mapper/sda17p1  /boot     ext2   rw,relatime                 0 0' | sudo tee -a mnt/fedora/etc/fstab
+echo '/dev/mapper/sda17p2  /sda17p2  btrfs  rw,relatime,subvolid=5      0 0' | sudo tee -a mnt/fedora/etc/fstab
+
+echo "### pmos DL"
+
+curl -L \
+  https://github.com/maggu2810/op6-containers/releases/download/oneplus-enchilada-pmos-ui-none/oneplus-enchilada-pmos-ui-none.tgz | \
+  sudo dd of=mnt/pmos/oneplus-enchilada-pmos-ui-none.tgz
+sudo tar xzpf mnt/pmos/oneplus-enchilada-pmos-ui-none.tgz -C mnt/pmos
+sudo rm mnt/pmos/oneplus-enchilada-pmos-ui-none.tgz
+
+echo "### pmos: modify content"
+
+# hostname
+sudo cp mnt/fedora/etc/hostname mnt/pmos/etc/hostname
+
+# fstab
+echo '/dev/mapper/sda17p2  /sda17p2  btrfs  rw,relatime,subvolid=5      0 0' | sudo tee -a mnt/pmos/etc/fstab
+
+echo "### pmos 2 fedora"
+
+sudo mnt/fedora/usr/bin/pmos-adopt-and-integrate mnt/pmos mnt/fedora
 
 echo "### copy boot image"
 
-cp mnt/boot/boot.img boot.img
+cp mnt/pmos/boot/boot.img boot.img
+
+echo "### force sync"
+sudo sync
 
 echo "### umount"
 
-sudo umount mnt/boot
+sudo umount mnt/pmos/boot
 sudo umount mnt
+rmdir mnt
 
 echo "### force sync"
 sudo sync
@@ -88,12 +134,12 @@ mv oneplus-enchilada-fedora.{simg,img}
 
 echo "### flash"
 
-#fastboot erase --slot=all system
-#fastboot erase userdata
-#fastboot erase --slot=all boot
-#fastboot erase dtbo
-fastboot flash boot --slot=all boot.img
 fastboot flash userdata oneplus-enchilada-fedora.img
+fastboot flash boot --slot=all boot.img
+fastboot erase --slot=all system
+fastboot erase userdata
+fastboot erase --slot=all boot
+fastboot erase dtbo
 ```
 
 # Introduction
@@ -164,34 +210,7 @@ After the switch_root has been executed, I have to analyze why the bootup stucks
 So, let's enable ssh daemon (we already have a kernel set IP address, so no need to wait for network target or similar)
 as early as possible:
 
-Add to the rootfs something like that
-
-```shell
-cat /etc/systemd/system/sshd-simple.service
-```
-
-```text
-[Unit]
-Description=OpenSSH server daemon
-Documentation=man:sshd(8) man:sshd_config(5)
-
-[Service]
-Type=notify
-EnvironmentFile=-/etc/sysconfig/sshd
-ExecStart=/usr/sbin/sshd -D $OPTIONS
-ExecReload=/bin/kill -HUP $MAINPID
-KillMode=process
-Restart=on-failure
-RestartSec=42s
-```
-
-```shell
-[unpriv@fedora ~]$ ls -lah /etc/systemd/system/*/sshd-simple.service 
-lrwxrwxrwx 1 root root 22 May  7  2023 /etc/systemd/system/basic.target.wants/sshd-simple.service -> ../sshd-simple.service
-lrwxrwxrwx 1 root root 22 May  7  2023 /etc/systemd/system/getty.target.wants/sshd-simple.service -> ../sshd-simple.service
-```
-
-and ensure that there are some server keys in `/etc/ssh`.
+See section in "Tooling"
 
 # Software
 
@@ -441,10 +460,11 @@ androidboot.verifiedbootstate=orange androidboot.keymaster=1 root=PARTUUID=19cc2
 
 [unpriv@fedora ~]$ cat /etc/fstab 
 /dev/mapper/sda17p2 / ext4 rw,relatime 0 0
-
 ```
 
-## Create
+# Tooling
+
+## PMOS: Create tgz
 
 ```shell
 echo "${HOME}/.local/var/pmbootstrap"'
@@ -460,19 +480,93 @@ y
 C.UTF-8
 oneplus6
 n
+y
 y' | pmbootstrap init
-pmbootstrap install
+pmbootstrap install --filesystem btrfs
 pmbootstrap export
-install android-tools for simg2img
+# install android-tools for simg2img
 simg2img /tmp/postmarketOS-export/oneplus-enchilada.img oneplus-enchilada.img
 export IMG_PATH="${PWD}/oneplus-enchilada.img"
+export DEV_IMG="$(sudo losetup -P -f "${IMG_PATH}" -b 4096 --show)"
 mkdir root
-sudo mount /dev/loop0p2 root
-sudo mount /dev/loop0p1 root/boot
+sudo mount "${DEV_IMG}"p2 root
+sudo mount "${DEV_IMG}"p1 root/boot
 sudo tar czpf oneplus-enchilada.tgz -C root/ .
 sudo umount root/boot root/
 rmdir root
 rm oneplus-enchilada.img
+```
+
+## PMOS: reinstall kernel
+
+```shell
+apk fix -r linux-postmarketos-qcom-sdm845
+```
+
+rewrite kernel to boot only
+
+```shell
+pmos-update-kernel
+```
+
+## early ssh daemon
+
+Add to the rootfs something like that
+
+```shell
+cat /etc/systemd/system/sshd-simple.service
+```
+
+```text
+[Unit]
+Description=OpenSSH server daemon
+Documentation=man:sshd(8) man:sshd_config(5)
+
+[Service]
+Type=notify
+EnvironmentFile=-/etc/sysconfig/sshd
+ExecStart=/usr/sbin/sshd -D $OPTIONS
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+RestartSec=42s
+```
+
+```shell
+[unpriv@fedora ~]$ ls -lah /etc/systemd/system/*/sshd-simple.service 
+lrwxrwxrwx 1 root root 22 May  7  2023 /etc/systemd/system/basic.target.wants/sshd-simple.service -> ../sshd-simple.service
+lrwxrwxrwx 1 root root 22 May  7  2023 /etc/systemd/system/getty.target.wants/sshd-simple.service -> ../sshd-simple.service
+```
+
+and ensure that there are some server keys in `/etc/ssh`.
+
+## ssh connection
+
+```shell
+ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no maggu2810@172.16.42.1
+```
+
+## Custom boot
+
+```shell
+export BOOT=/home/maggu2810/.local/var/pmbootstrap/chroot_rootfs_oneplus-enchilada/boot
+cd /tmp
+rm -rf foo
+mkdir foo
+cd foo
+curl -O "https://gitlab.com/sdm845-mainline/pmtools/-/raw/main/utils/mkbootimg.sh"
+chmod +x mkbootimg.sh
+mkdir initramfs.tmp
+(cd initramfs.tmp; zcat "${BOOT}"/initramfs  | cpio -idmv)
+vim initramfs.tmp/init_functions.sh
+(cd initramfs.tmp; find . | cpio -o -c -R root:root | gzip -9 > ../initramfs)
+
+./mkbootimg.sh \
+  -d "${BOOT}"/dtbs/qcom/sdm845-oneplus-enchilada.dtb \
+  -r initramfs \
+  -k "${BOOT}"/vmlinuz \
+  -o "${PWD}/mainline-boot.img" \
+  -c PMOS_NOSPLASH
 ```
 
 # Notes
