@@ -94,7 +94,7 @@ echo "### pmos: modify content"
 sudo cp mnt/fedora/etc/hostname mnt/pmos/etc/hostname
 
 # fstab
-echo '/dev/mapper/sda17p2  /sda17p2  btrfs  rw,relatime,subvolid=5      0 0' | sudo tee -a mnt/pmos/etc/fstab
+echo '/dev/dm-1  /sda17p2  btrfs  rw,relatime,subvolid=5      0 0' | sudo tee -a mnt/pmos/etc/fstab
 
 echo "### pmos 2 fedora"
 
