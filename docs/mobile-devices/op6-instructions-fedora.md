@@ -64,9 +64,6 @@ podman export op6-fedora | sudo tar -C mnt/fedora/ -xp
 
 echo "### fedora: modify content"
 
-# TODO: update tools
-sudo cp /home/maggu2810/workspace/projects/linux-mobile/op6/op6-fedora-pmos/bin/* mnt/fedora/usr/bin/
-
 # hostname
 echo 'oneplus6' | sudo tee mnt/fedora/etc/hostname
 
@@ -496,6 +493,16 @@ sudo umount root/boot root/
 rmdir root
 rm oneplus-enchilada.img
 ```
+
+## PMOS: packages
+
+### phosh
+
+```shell
+postmarketos-base device-oneplus-enchilada postmarketos-ui-phosh device-oneplus-enchilada-nonfree-firmware calls chatty eog evince firefox-esr font-noto font-noto-emoji gnome-calculator gnome-clocks gnome-console gnome-contacts gnome-software gnome-software-plugin-apk gnome-text-editor karlender lollypop mobile-config-firefox phosh-mobile-settings portfolio postmarketos-artwork-wallpapers postmarketos-default-camera postmarketos-tweaks postmarketos-welcome postprocessd ttyescape postmarketos-base-nofde
+```
+
+The following package is named on "install" but not available on apk install ` postmarketos-hidden-desktop-entries`.
 
 ## PMOS: reinstall kernel
 
