@@ -5,6 +5,10 @@
 * [rsync](apps/rsync.md)
 * [Youtube](apps/youtube.md)
 
+## Games
+
+* [Descent](games/descent.md)
+
 ## Linux
 
 * [UEFI + GPT Bootable Linux Stick](linux/usb-boot.md)
