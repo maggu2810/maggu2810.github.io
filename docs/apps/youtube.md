@@ -3,7 +3,7 @@ Youtube etc.
 
 ***Youtube Video / Music and related stuff***
 
-**Author**: *Markus Rathgeb*
+**Author:** *Markus Rathgeb*
 
 ---
 
