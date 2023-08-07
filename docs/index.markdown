@@ -6,6 +6,7 @@ Hello World
 
 ### Apps
 
+* [rsync](apps/rsync.md)
 * [Youtube](apps/youtube.md)
 
 ### Linux
