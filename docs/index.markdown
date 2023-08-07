@@ -1,15 +1,11 @@
-# For future use
+# Navigation
 
-Hello World
-
-## Test Links
-
-### Apps
+## Apps
 
 * [rsync](apps/rsync.md)
 * [Youtube](apps/youtube.md)
 
-### Linux
+## Linux
 
 * [UEFI + GPT Bootable Linux Stick](linux/usb-boot.md)
 * [bootstrap](linux/bootstrap.md)
@@ -17,30 +13,30 @@ Hello World
 * Fedora
   * [packaging](linux/fedora-packaging.md)
 
-### Development
+## Development
 
-#### Linux
+### Linux
 
 * [Linux - netlink](development/linux/netlink.md)
 
-#### FreeRTOS
+### FreeRTOS
 
 * [FreeRTOS](development/FreeRTOS/FreeRTOS.md)
 
-#### STM32
+### STM32
 
 * [STM32 - CLion](development/stm32/c-cxx-stm32-clion.md)
 * [STM32 - stm32f4-discovery](development/stm32/c-cxx-stm32-stm32f4-discovery.md)
 
-#### Yocto
+### Yocto
 
 * [Yocto - Kernel Development](development/yocto/kernel-development.md)
 
-### old
+## old
 
 * [Google Sites - IT](https://sites.google.com/u/0/d/0Bx99QXY8p6gvendwNERaTGdIbWM/p/0Bx99QXY8p6gvMEJkQ1l1S2JDczA/preview?resourcekey=0-U9HHB-2Q_6c88OLNPRduPw)
 
-### Mobile Devices
+## Mobile Devices
 
 * [OnePlus 6 / 6T](mobile-devices/oneplus_6_6t.md)
 * [OnePlus 6 / 6T - Arch Linux ARM](mobile-devices/op6-instructions-alarm.md)
