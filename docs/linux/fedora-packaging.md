@@ -7,7 +7,88 @@ Fedora Packaging
 
 ---
 
-# Notes
+# Notes (same architecture)
+
+Explicit compilation for Fedora version and architecture:
+
+```shell
+fedpkg --release f38 mockbuild --mock-config fedora-38-x86_64
+```
+
+# Container - podman
+
+Inform about image
+
+```shell
+podman search fedora
+
+skopeo inspect docker://registry.fedoraproject.org/fedora
+```
+
+Setup container
+
+```shell
+podman container run \
+  -it \
+  --name=fedora-38-rpmdev-mediaelch \
+  --mount type=bind,src=/home,target=/home \
+  fedora:38
+
+```
+
+Restart container
+
+```shell
+podman container start -ai fedora-38-rpmdev-mediaelch
+```
+
+Installing Packager Tools
+
+```shell
+dnf install fedora-packager fedora-review
+```
+
+Install build requirements
+
+```shell
+dnf install $(cat MediaElch.spec | grep ^BuildRequires | cut -d\: -f2-)
+```
+
+Download sources
+
+```shell
+spectool -g MediaElch.spec
+```
+
+Build locally
+
+```shell
+fedpkg --release f38 local
+```
+
+Check RPM lint
+
+```shell
+fedpkg --release f38 lint
+```
+
+User container
+
+```shell
+(
+uid=$(id -u)
+gid=$(id -g)
+podman container run \
+  --user $uid:$gid \
+  --userns keep-id:uid=$uid,gid=$gid \
+  -it \
+  --name=fedora-38-rpmdev-mediaelch \
+  --mount type=bind,src=/home,target=/home \
+  fedora:38
+)
+```
+
+# Notes (different host and target architecture)
 
 Assume
 
