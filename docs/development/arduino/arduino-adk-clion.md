@@ -7,6 +7,12 @@ Arduino ADK - CLion
 
 ---
 
+# Arduino Mega ADK Information
+
+* https://docs.arduino.cc/retired/boards/arduino-mega-adk-rev3#programming
+* https://www.youtube.com/watch?v=h9WIAgpzmRc
+* https://www.arduino.cc/en/uploads/Main/arduino-mega-adk-schematic.pdf
+
 # Platform.io
 
 ## Setup
