@@ -25,7 +25,8 @@ Add your certificate chain to `%HOME%\.platformio\pyenv\Lib\site-packages\certif
 
 ### Check
 
-The following seems not be necessary, but need to be checked again: If necessary remove this "introduction", if not necessary, remove the whole paragraph
+The following seems not be necessary, but need to be checked again: If necessary remove this "introduction", if not
+necessary, remove the whole paragraph
 
 * edit `%HOME%\.platformio\pyenv\Lib\site-packages\urllib3\connectionpool.py`
 * `class HTTPSConnectionPool`
@@ -38,8 +39,8 @@ The following seems not be necessary, but need to be checked again: If necessary
 
 * Install Plugin `Arduino Support`
 * We need the Arduino SDK.
-  * Download the Arduino Legacy IDE (1.8.X) from here [Arduino Software](https://www.arduino.cc/en/software)
-  * install
+    * Download the Arduino Legacy IDE (1.8.X) from here [Arduino Software](https://www.arduino.cc/en/software)
+    * install
 
 ```shell
 mkdir ~/bin/pkgs/arduino; tar xJf ~/Downloads/arduino-1.8.19-linux64.tar.xz -C ~/bin/pkgs/arduino
@@ -48,12 +49,12 @@ mkdir ~/bin/pkgs/arduino; tar xJf ~/Downloads/arduino-1.8.19-linux64.tar.xz -C ~
 ## Create Project
 
 * Create new project in CLion
-  * New Project
-  * `--- Other ---`, `Arduino Sketch`
-  * Board: Arduino Mega ADK
-  * Programmer: Arduino as ISP
-  * Port: /dev/ttyACM0
-  * Baud Rate: default
+    * New Project
+    * `--- Other ---`, `Arduino Sketch`
+    * Board: Arduino Mega ADK
+    * Programmer: Arduino as ISP
+    * Port: /dev/ttyACM0
+    * Baud Rate: default
 
 ## Find Arduino SDK path
 
@@ -111,3 +112,59 @@ Choose upload and build.
 ## Notes
 
 It seems "third party libraries" are used only if you import the library that name fits to the directory.
+
+# AOA
+
+## Notes
+
+* [Accessory Development Kit 2012 Guide](https://stuff.mit.edu/afs/sipb/project/android/docs/tools/adk/adk2.html)
+
+## ADK 2012 Source
+
+* http://arduino-er.blogspot.com/2013/03/downloading-adk-2012-source.html
+
+> Sunday, March 3, 2013
+>
+> # Downloading the ADK 2012 Source
+> The [Android Accessory Development Kit (ADK) for 2012](http://developer.android.com/tools/adk/adk2.html) is the latest
+> reference implementation of an [Android Open Accessory](http://source.android.com/tech/accessories/index.html) device,
+> designed to help Android hardware accessory builders and software developers create accessories for Android. The ADK
+> 2012 is based on the [Arduino](http://arduino.cc/) open source electronics prototyping platform, with some hardware and software extensions
+> that allow it to communicate with Android devices.
+>
+> A limited number of these kits were produced and distributed at the Google I/O 2012 developer conference. If you did
+> not receive one of these kits, fear not! The specifications and design files for the hardware were also released for use
+> by manufacturers and hobbyists. You should expect to see kits with similar features available for purchase, or you can
+> build one yourself!
+>
+> ## Downloading the ADK Source on Ubuntu
+>
+> The support software and hardware specifications for the ADK 2012 are available from the Android source repository.
+> Follow the instructions below to obtain the source material for the ADK.
+>
+> Before download the source, you have to install curl, git and repo. Refer [here](http://android-er.blogspot.com/2013/03/install-repo-on-ubuntu.html).
+>
+> Then you can download the ADK 2012 Source, enter the commands in Terminal.
+>
+> ```shell
+> mkdir android-accessories
+> cd android-accessories
+> repo init -u https://android.googlesource.com/accessories/manifest
+> repo sync
+> ```
+>
+> Source: [http://developer.android.com/tools/adk/adk2.html](http://developer.android.com/tools/adk/adk2.html)
+>
+> After successfully completing this process, you should have the source code and tools for working with the ADK 2012:
+>
+> * **adk2012/board** - Source code and hardware design files for the ADK 2012
+> * **adk2012/app** - Source code for the ADK 2012 Android companion application
+> * **external/ide** - Source code for the ADK 2012 Integrated Development Environment (IDE)
+> * **external/toolchain** - The toolchain used by the ADK 2012 IDE
+
+## Working Examples
+
+Download UsbHost library with Android Open Accessory support. It can be taken
+from [aoabook - Arduino](https://github.com/aoabook/Arduino) in `libraries/UsbHost`.
+
+There you will also find working examples.
