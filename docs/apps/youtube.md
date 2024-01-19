@@ -14,9 +14,6 @@ Youtube etc.
 | youtube-dl | [Repo](https://github.com/ytdl-org/youtube-dl) |                                                                                                                |
 | yt-dlp     | [Repo](https://github.com/yt-dlp/yt-dlp)       | found by [fix uploader id error](https://appuals.com/youtube-dl-error-unable-to-extract-uploader-id/) |
 
-* youtube-dl
-* yt-dlp ()
-
 # Android
 
 If you would like to use the command line version you could use termux and e.g. youtube-dl or yt-dlp.
@@ -69,7 +66,7 @@ youtube-dl -f bestvideo[ext=webm][width=1920][height=1080]+bestaudio[ext=webm] -
 
 # External Information
 
-Taken from: https://stackoverflow.com/a/64526840
+Taken from: [stackoverflow comment](https://stackoverflow.com/a/64526840)
 
 ## If you want to download audio in `opus` format - with best possible quality and without any conversion
 
