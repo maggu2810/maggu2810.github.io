@@ -16,6 +16,7 @@
 * [container](linux/container.md)
 * Fedora
   * [packaging](linux/fedora-packaging.md)
+  * [troubleshooting](linux/fedora-troubleshooting.md)
 
 ## Development
 
