@@ -46,14 +46,14 @@ You have E1565
 # u-boot
 
 * perform a backup first
-  * Guide: https://androidroot.github.io/pages/guides/tegra3-guide-nvflash-jellybean/ ([Archive](archive/AndroidRoot.Mobi%20-%20Tegra3%20Guide%20nvflash%20NEXUS%207%20%28and%20Transformer%20Jellybeans%29.pdf))
+  * Guide: [Tegra3 Guide: nvflash NEXUS 7 (and Transformer Jellybeans)](https://androidroot.github.io/pages/guides/tegra3-guide-nvflash-jellybean/) ([Archive](archive/AndroidRoot.Mobi%20-%20Tegra3%20Guide%20nvflash%20NEXUS%207%20%28and%20Transformer%20Jellybeans%29.pdf))
   * The links to the downloads are not working at the time of writing, here you can find them: https://github.com/AndroidRoot/androidroot.github.io/tree/master/download
   * To use nvflash from `nvflash-tools-linux` you need support for 32 bit ELF files (for Fedora 40: `dnf install glibc32 libstdc++.i686`)
   * wheelie source code can be found here, I compiled und used the current (at time of writing) master: https://github.com/AndroidRoot/wheelie
  
 * compile u-boot for asus grouper  
-  * Guide: https://github.com/u-boot/u-boot/blob/master/doc/board/asus/grouper_common.rst ([Archive](archive/u-boot_doc_board_asus_grouper_common.rst%20at%20master%20%C2%B7%20u-boot_u-boot%20%C2%B7%20GitHub.pdf))
-  * Toolchain: https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads (I used "x86_64 Linux hosted cross toolchains", "AArch32 bare-metal target (arm-none-eabi)", "arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz")
+  * Guide: [U-Boot for the ASUS/Google Nexus 7 (2012)](https://github.com/u-boot/u-boot/blob/master/doc/board/asus/grouper_common.rst) ([Archive](archive/u-boot_doc_board_asus_grouper_common.rst%20at%20master%20%C2%B7%20u-boot_u-boot%20%C2%B7%20GitHub.pdf))
+  * Toolchain: [Arm GNU Toolchain Downloads](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads) (I used "x86_64 Linux hosted cross toolchains", "AArch32 bare-metal target (arm-none-eabi)", "arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz")
 
 ```
 dnf install swig
@@ -65,7 +65,7 @@ make
 ```
 
 * dump SBK
-  * https://openrt.gitbook.io/open-surfacert/common/boot-sequence/tegra-soc-boot-process/fusee-gelee/payloads/dump-platform-key-sbk ([Archive](archive/Open%20Surface%20RT.pdf))
+  * [Dump platform key (SBK)](https://openrt.gitbook.io/open-surfacert/common/boot-sequence/tegra-soc-boot-process/fusee-gelee/payloads/dump-platform-key-sbk) ([Archive](archive/Open%20Surface%20RT.pdf))
   * If something went wrong power off the device and enter APX mode again. IIRC you can do some commands only initial on APX mode.
 
 ```
@@ -85,11 +85,11 @@ pip install pyusb
     * "With nv3p, repart-block.bin is used. It contains BCT and a bootloader in encrypted state in form, which can just be written RAW at the start of eMMC."
     * "Flashing repart-block.bin eliminates vendor restrictions on eMMC and allows the user to use/partition it in any way the user desires."
   * Build
-    * Guide: https://github.com/u-boot/u-boot/blob/master/doc/board/asus/grouper_common.rst ([Archive](archive/u-boot_doc_board_asus_grouper_common.rst%20at%20master%20%C2%B7%20u-boot_u-boot%20%C2%B7%20GitHub.pdf))
+    * Guide: [U-Boot for the ASUS/Google Nexus 7 (2012)](https://github.com/u-boot/u-boot/blob/master/doc/board/asus/grouper_common.rst) ([Archive](archive/u-boot_doc_board_asus_grouper_common.rst%20at%20master%20%C2%B7%20u-boot_u-boot%20%C2%B7%20GitHub.pdf))
     * See:
       * "Process U-Boot", "Processing for the NV3P protocol"
   * Flash
-    * Guide: https://github.com/u-boot/u-boot/blob/master/doc/board/asus/grouper_common.rst ([Archive](archive/u-boot_doc_board_asus_grouper_common.rst%20at%20master%20%C2%B7%20u-boot_u-boot%20%C2%B7%20GitHub.pdf))
+    * Guide: [U-Boot for the ASUS/Google Nexus 7 (2012)](https://github.com/u-boot/u-boot/blob/master/doc/board/asus/grouper_common.rst) ([Archive](archive/u-boot_doc_board_asus_grouper_common.rst%20at%20master%20%C2%B7%20u-boot_u-boot%20%C2%B7%20GitHub.pdf))
     * See:
       * "Flashing U-Boot into the eMMC", "Flashing with the NV3P protocol"
 
@@ -115,7 +115,7 @@ pip install pyusb
 * "asus - grouper" moved to "nvidia - tegra-armv7"
   * See: [MR #4606: Nvidia Tegra ARMv7 switch to common packages](https://gitlab.com/postmarketOS/pmaports/-/merge_requests/4606)
 * use SXMO for X11
-  * https://gitlab.com/postmarketOS/pmaports/-/issues/1694
+  * [Issues: Phosh on Asus Nexus 7 2012 / grouper](https://gitlab.com/postmarketOS/pmaports/-/issues/1694)
 
 ## install 
 
@@ -142,10 +142,10 @@ dd if=/home/maggu2810/.local/var/pmbootstrap/chroot_native/home/pmos/rootfs/nvid
 
 ### SXMO deviceprofile
 
-* https://sxmo.org/deviceprofile
-* https://man.sr.ht/~anjan/sxmo-docs-next/SYSTEMGUIDE.md#writing-a-deviceprofile
-* https://git.sr.ht/~mil/sxmo-utils/tree/master/item/scripts/deviceprofiles/README.md
-* https://logout.hu/bejegyzes/hcl/postmarketos_nexus_7_2012_sxmo_2.html
+* [https://sxmo.org/deviceprofile](https://sxmo.org/deviceprofile)
+* [https://man.sr.ht/~anjan/sxmo-docs-next/SYSTEMGUIDE.md#writing-a-deviceprofile](https://man.sr.ht/~anjan/sxmo-docs-next/SYSTEMGUIDE.md#writing-a-deviceprofile)
+* [https://git.sr.ht/~mil/sxmo-utils/tree/master/item/scripts/deviceprofiles/README.md](https://git.sr.ht/~mil/sxmo-utils/tree/master/item/scripts/deviceprofiles/README.md)
+* [https://logout.hu/bejegyzes/hcl/postmarketos_nexus_7_2012_sxmo_2.html](https://logout.hu/bejegyzes/hcl/postmarketos_nexus_7_2012_sxmo_2.html)
 
 ```bash
 sudo apk add libgpiod
