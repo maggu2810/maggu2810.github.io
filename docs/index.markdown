@@ -49,6 +49,9 @@
 
 * [postmarketOS](mobile-devices/postmarketos.md)
 * Device specific
-  * [OnePlus 6 / 6T](mobile-devices/oneplus_6_6t.md)
-  * [OnePlus 6 / 6T - Arch Linux ARM](mobile-devices/op6-instructions-alarm.md)
-  * [OnePlus 6 / 6T - Fedora](mobile-devices/op6-instructions-fedora.md)
+  * OnePlus 6 / 6T
+    * [OnePlus 6 / 6T](mobile-devices/oneplus_6_6t.md)
+    * [OnePlus 6 / 6T - Arch Linux ARM](mobile-devices/op6-instructions-alarm.md)
+    * [OnePlus 6 / 6T - Fedora](mobile-devices/op6-instructions-fedora.md)
+  * Google Nexus 7 2012 (asus-grouper)
+    * [asus grouper: u-boot and postmarketOS](mobile-devices/asus-grouper/postmarketos.md)
