@@ -42,3 +42,16 @@ blkid
 /dev/sda2: UUID="11111111-2222-3333-4444-555555555555" BLOCK_SIZE="4096" TYPE="ext4" PARTLABEL="Linux Boot" PARTUUID="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
 ...
 ```
+
+Caution:
+If blsdir (perhaps bootloader specification directory) is set, the import of that entries are used from this directory.
+
+```
+grub2-editenv -v /boot/grub2/grubenv list
+```
+
+```
+blsdir=/fedora/loader/entries
+```
+
+
