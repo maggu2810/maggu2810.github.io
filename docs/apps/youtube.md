@@ -9,9 +9,9 @@ Youtube etc.
 
 # Common Clients
 
-| Name       | URLs                                           | Comment                                                                                                        |
-|------------|------------------------------------------------|----------------------------------------------------------------------------------------------------------------|
-| youtube-dl | [Repo](https://github.com/ytdl-org/youtube-dl) |                                                                                                                |
+| Name       | URLs                                           | Comment                                                                                               |
+|------------|------------------------------------------------|-------------------------------------------------------------------------------------------------------|
+| youtube-dl | [Repo](https://github.com/ytdl-org/youtube-dl) |                                                                                                       |
 | yt-dlp     | [Repo](https://github.com/yt-dlp/yt-dlp)       | found by [fix uploader id error](https://appuals.com/youtube-dl-error-unable-to-extract-uploader-id/) |
 
 # Android
@@ -24,13 +24,19 @@ You need to install python and after that you could use pip to install the respe
 
 | Name            | URLs                                                                                                                                                                                                                      | Comment                                                                            | Shorts on Channel of Fabi Rommel |
 |-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|----------------------------------|
-| NewPipe         | [Page](https://newpipe.net/), [Repo](https://github.com/TeamNewPipe/NewPipe)                                                                                                                                              | A libre lightweight streaming front-end for Android.                               | available, downloadable                          |
+| NewPipe         | [Page](https://newpipe.net/), [Repo](https://github.com/TeamNewPipe/NewPipe)                                                                                                                                              | A libre lightweight streaming front-end for Android.                               | available, downloadable          |
 | PipePipe        | [Repo](https://codeberg.org/NullPointerException/PipePipe)                                                                                                                                                                | A DIVERGED fork of NewPipe with more services, client features and bug fixes.      | available, downloadable          |
 | SkyTube         | [Repo](https://github.com/SkyTubeTeam/SkyTube)                                                                                                                                                                            | Fully open-source and free software.                                               | missing                          |
 | SkyTube Extra   | --                                                                                                                                                                                                                        | Contains extra features that are powered by non-OSS libraries.                     | missing                          |
 | Youtube Vanced  | [Info](https://www.xda-developers.com/best-youtube-vanced-alternatives/), [Repos](https://github.com/TeamVanced)                                                                                                          | Discontinued                                                                       | --                               |
 | ReVanced ...    | [Repos](https://github.com/revanced), [ReVanced Megathread](https://forum.xda-developers.com/t/app-guides-unofficial-revanced-megathread.4523967/), [Unofficial Builds](https://androidfilehost.com/?w=files&flid=337187) | Seems currently the best option to use an enhanced / modified official Youtube App | available, not downloadable      |
 | YouTube Vanced+ | [Repo](https://github.com/cuynu/ytvancedx)                                                                                                                                                                                | Not tested, did not get the whole store till now.                                  | --                               |
+
+# Android TV
+
+| Name      | URLs                                          | Comment | Shorts on Channel of Fabi Rommel |
+|-----------|-----------------------------------------------|---------|----------------------------------|
+| SmartTube | [Repo](https://github.com/yuliskov/SmartTube) |         | available                        |
 
 # PC
 
