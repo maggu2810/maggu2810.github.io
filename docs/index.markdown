@@ -2,6 +2,7 @@
 
 ## Apps
 
+* [photoprism](apps/photoprism.md)
 * [rsync](apps/rsync.md)
 * [Youtube](apps/youtube.md)
 
