@@ -2,9 +2,16 @@
 
 ## Apps
 
-* [photoprism](apps/photoprism.md)
 * [rsync](apps/rsync.md)
 * [Youtube](apps/youtube.md)
+
+### Photo Video Library
+
+* Comparison
+  * [Free and OpenSource Photo Libraries](https://meichthys.github.io/foss_photo_libraries/)
+  * [LibrePhotos: Features compared to competitors](https://docs.librephotos.com/docs/user-guide/features/)
+* [immich](apps/photo-video-library/immich.md)
+* [PhotoPrism](apps/photo-video-library/photoprism.md)
 
 ## Games
 

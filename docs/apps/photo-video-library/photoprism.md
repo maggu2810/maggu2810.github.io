@@ -1,7 +1,7 @@
-photoprism
+PhotoPrism
 ===
 
-***photoprism related information***
+***PhotoPrism related information***
 
 **Author**: *Markus Rathgeb*
 
