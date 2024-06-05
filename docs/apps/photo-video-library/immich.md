@@ -14,3 +14,7 @@ immich
 * Delete them
 
 https://github.com/immich-app/immich/discussions/5449#discussioncomment-8831452
+
+# Folder Album Creator
+
+[immich Folder Album Creator](https://github.com/Salvoxia/immich-folder-album-creator)
