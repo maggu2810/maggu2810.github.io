@@ -28,6 +28,10 @@
 
 ## Development
 
+### Languages (general)
+
+* [C++](development/language/cpp.md)
+
 ### Arduino
 
 * [Arduino - Mega ADK](development/arduino/arduino-adk-clion.md)
