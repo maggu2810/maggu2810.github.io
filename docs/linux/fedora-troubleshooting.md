@@ -16,8 +16,6 @@ Fedora Troubleshooting
 * [Fedora NVIDIA](https://rpmfusion.org/Howto/NVIDIA)
 * [kmod-nvidia vs akmod-nvidia](https://forums.fedoraforum.org/showthread.php?228557-kmod-nvidia-vs-akmod-nvidia)
 * [Rebuild Kernel Modules with Akmods](https://brandonrozek.com/blog/rebuildkernelakmod/)
-* [Download and install a kernel using the koji client](https://docs.fedoraproject.org/en-US/quick-docs/kernel-installing-from-koji/#_download_and_install_a_kernel_using_the_koji_client)
-* [Koji: Search for Kernel](https://koji.fedoraproject.org/koji/search?terms=kernel-6.7*fc40*&type=build&match=glob)
 * [Setting up chroot from a live image in Fedora. Regenerate grub2 for Fedora.](https://gist.github.com/Tamal/73e65bfb0e883e438310c5fe81c5de14)
 * [Working with the GRUB 2 Boot Loader](https://docs.fedoraproject.org/en-US/fedora/latest/system-administrators-guide/kernel-module-driver-configuration/Working_with_the_GRUB_2_Boot_Loader/#sec-Reinstalling_GRUB_2)
 * [Changes/UnifyGrubConfig](https://fedoraproject.org/wiki/Changes/UnifyGrubConfig)

@@ -23,6 +23,7 @@
 * [bootstrap](linux/bootstrap.md)
 * [container](linux/container.md)
 * Fedora
+  * [kernel](linux/fedora-kernel.md)
   * [packaging](linux/fedora-packaging.md)
   * [troubleshooting](linux/fedora-troubleshooting.md)
 
@@ -35,7 +36,7 @@
 ### Arduino
 
 * [Arduino - Mega ADK](development/arduino/arduino-adk-clion.md)
-
+      
 ### Linux
 
 * [Linux - netlink](development/linux/netlink.md)
