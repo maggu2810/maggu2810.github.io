@@ -62,6 +62,7 @@
 
 * [postmarketOS](mobile-devices/postmarketos.md)
 * Device specific
+  * [OnePlus 8 Pro](mobile-devices/oneplus_8_pro.md)
   * OnePlus 6 / 6T
     * [OnePlus 6 / 6T](mobile-devices/oneplus_6_6t.md)
     * [OnePlus 6 / 6T - Arch Linux ARM](mobile-devices/op6-instructions-alarm.md)
