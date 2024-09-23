@@ -22,6 +22,7 @@
 * [UEFI + GPT Bootable Linux Stick](linux/usb-boot.md)
 * [bootstrap](linux/bootstrap.md)
 * [container](linux/container.md)
+* [devicetree](linux/devicetree.md)
 * Fedora
   * [kernel](linux/fedora-kernel.md)
   * [packaging](linux/fedora-packaging.md)
