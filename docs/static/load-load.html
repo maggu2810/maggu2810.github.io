@@ -28,6 +28,7 @@ if (urlParams.has('logonly')) {
     document.location.href = firstUrl;
   } else {
     const iframe = document.createElement("iframe");
+    iframe.hidden = true;
     iframe.onload = function(e) {
       if (secondUrl) {
         document.location.href = secondUrl;
