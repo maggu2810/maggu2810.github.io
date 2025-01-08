@@ -1,0 +1,42 @@
+<html>
+<head><title>Load Load</title></head>
+<body>
+<script>
+function parseInit(init) {
+  if (init == null) {
+    return false;
+  }
+  if (init == "0" || init == "false") {
+    return false;
+  }
+  return true;
+}
+
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const firstUrl = urlParams.get('firstUrl');
+const secondUrl = urlParams.get('secondUrl');
+const init = parseInit(urlParams.get('init'));
+const doit = true;
+
+if (urlParams.has('logonly')) {
+  console.log("firstUrl", firstUrl);
+  console.log("secondUrl", secondUrl);
+  console.log("init", init);
+} else {
+  if (init) {
+    document.location.href = firstUrl;
+  } else {
+    const iframe = document.createElement("iframe");
+    iframe.onload = function(e) {
+      if (secondUrl) {
+        document.location.href = secondUrl;
+      }
+    };
+    iframe.src = firstUrl;
+    document.body.appendChild(iframe);
+  }
+}
+</script>
+</body>
+
