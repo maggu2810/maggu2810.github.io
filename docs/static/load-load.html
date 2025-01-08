@@ -14,16 +14,32 @@ function parseInit(init) {
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
+const title = urlParams.get('title');
+const favicon = urlParams.get('favicon');
 const firstUrl = urlParams.get('firstUrl');
 const secondUrl = urlParams.get('secondUrl');
 const init = parseInit(urlParams.get('init'));
 const doit = true;
 
 if (urlParams.has('logonly')) {
+  console.log("title", title);
+  console.log("favicon", favicon);
   console.log("firstUrl", firstUrl);
   console.log("secondUrl", secondUrl);
   console.log("init", init);
 } else {
+  if (title != null) {
+    document.title = title;
+  }
+  if (favicon != null) {
+    var link = document.querySelector("link[rel~='icon']");
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'icon';
+      document.head.appendChild(link);
+    }
+    link.href = favicon;
+  }
   if (init) {
     document.location.href = firstUrl;
   } else {
