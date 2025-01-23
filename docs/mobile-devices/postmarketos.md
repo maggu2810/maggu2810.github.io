@@ -34,3 +34,15 @@ wait for the MR's CI pipeline to complete building.
 then use `mrtest` in your phone to try out pmaports MR.
 
 https://wiki.postmarketos.org/wiki/Mrtest
+
+# flatpak
+
+fix:
+* `error: Listing refs: opendir(refs/heads): No such file or directory` on repair (as root)
+* `opendir(refs/remotes): No such file or directory` on install (as root)
+
+```
+# https://github.com/elementary/default-settings/issues/247#issuecomment-893169121
+mkdir -p ~/.local/share/flatpak/repo/refs/remotes/ ~/.local/share/flatpak/repo/refs/heads/
+mkdir -p /var/lib/flatpak/repo/refs/remotes/ /var/lib/flatpak/repo/refs/heads
+```
