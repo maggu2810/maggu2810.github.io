@@ -27,6 +27,7 @@
   * [kernel](linux/fedora-kernel.md)
   * [packaging](linux/fedora-packaging.md)
   * [troubleshooting](linux/fedora-troubleshooting.md)
+* [notes](linux/notes.md)
 
 ## Development
 
