@@ -4,6 +4,7 @@
 
 * [rsync](apps/rsync.md)
 * [Youtube](apps/youtube.md)
+* [Alternative (privacy friendly) Apps](apps/alternative-pf-apps.md)
 
 ### Photo Video Library
 
@@ -72,3 +73,4 @@
     * [OnePlus 6 / 6T - Fedora](mobile-devices/op6-instructions-fedora.md)
   * Google Nexus 7 2012 (asus-grouper)
     * [asus grouper: u-boot and postmarketOS](mobile-devices/asus-grouper/postmarketos.md)
+
