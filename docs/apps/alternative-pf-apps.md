@@ -13,8 +13,9 @@ Alternative (privacy friendly) Apps
 
 # List
 
-| Category | App                                          | Notes                                                                                                                                                                          |
-| -------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Location Sharing | [Paralino](https://paralino.com/) | |
-| Maps     | [Magic Earth](https://www.magicearth.com/)   | Turn-by-turn navigation, OpenStreetMap, Crowd-Sourced Traffic, 3D maps, Satellite maps, Offline maps and Transit. Entirely free.                                               |
-| Notes    | [Standard Notes](https://standardnotes.com/) | Standard Notes is a free, secure note-taking app with powerful end-to-end encryption, unparalleled privacy features, and seamless cross-platform syncing on unlimited devices. |
+| Category         | App                                                 | Notes                                                                                                                                                                          |
+| ---------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Location Sharing | [Paralino](https://paralino.com/)                   |                                                                                                                                                                                |
+| Maps             | [Magic Earth](https://www.magicearth.com/)          | Turn-by-turn navigation, OpenStreetMap, Crowd-Sourced Traffic, 3D maps, Satellite maps, Offline maps and Transit. Entirely free.                                               |
+| Notes            | [ImapNotes3](https://github.com/niendo1/ImapNotes3) | A notes and checklist Android app that synchronizes in your IMAP mailbox.                                                                                                      |
+| Notes            | [Standard Notes](https://standardnotes.com/)        | Standard Notes is a free, secure note-taking app with powerful end-to-end encryption, unparalleled privacy features, and seamless cross-platform syncing on unlimited devices. |
