@@ -49,6 +49,10 @@
 
 * [FreeRTOS](development/FreeRTOS/FreeRTOS.md)
 
+### Raspberry Pi Pico
+
+* [Raspberry Pi Pico](development/raspberry-pi-pico.md)
+
 ### STM32
 
 * [STM32 - CLion](development/stm32/c-cxx-stm32-clion.md)
