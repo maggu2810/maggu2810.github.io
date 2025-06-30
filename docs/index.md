@@ -78,3 +78,8 @@
   * Google Nexus 7 2012 (asus-grouper)
     * [asus grouper: u-boot and postmarketOS](mobile-devices/asus-grouper/postmarketos.md)
 
+## Toniebox
+
+* [Toniebox Hacking – How to get started](https://gt-blog.de/toniebox-hacking-how-to-get-started/)
+* [Toniebox Reverse Engineering](https://tonies-wiki.revvox.de/)
+* [GitHub](https://github.com/toniebox-reverse-engineering)
