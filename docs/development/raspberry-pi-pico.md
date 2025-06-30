@@ -116,14 +116,17 @@ cd "${PICO_BASEDIR}"/openocd
 
 ./bootstrap
 
-CFLAGS="-Wno-error=misleading-indentation -Wno-error=stringop-overflow -Wno-error=calloc-transposed-args"
-CXXFLAGS="-Wno-error=misleading-indentation -Wno-error=stringop-overflow -Wno-error=calloc-transposed-args"
+export CFLAGS="-Wno-error=misleading-indentation -Wno-error=stringop-overflow -Wno-error=calloc-transposed-args"
+export CXXFLAGS="-Wno-error=misleading-indentation -Wno-error=stringop-overflow -Wno-error=calloc-transposed-args"
 
 ./configure \
   --enable-picoprobe \
   --prefix="${PICO_BASEDIR}"/openocd.install
 
-make -j4
+make -j$(nproc)
+
+unset CFLAGS
+unset CXXFLAGS
 
 make install
 
