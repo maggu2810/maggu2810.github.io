@@ -31,6 +31,7 @@ You need to install python and after that you could use pip to install the respe
 | Youtube Vanced  | [Info](https://www.xda-developers.com/best-youtube-vanced-alternatives/), [Repos](https://github.com/TeamVanced)                                                                                                          | Discontinued                                                                       | --                               |
 | ReVanced ...    | [Repos](https://github.com/revanced), [ReVanced Megathread](https://forum.xda-developers.com/t/app-guides-unofficial-revanced-megathread.4523967/), [Unofficial Builds](https://androidfilehost.com/?w=files&flid=337187) | Seems currently the best option to use an enhanced / modified official Youtube App | available, not downloadable      |
 | YouTube Vanced+ | [Repo](https://github.com/cuynu/ytvancedx)                                                                                                                                                                                | Not tested, did not get the whole store till now.                                  | --                               |
+| YTDLnix | [Homepage](https://ytdlnis.com/), [Repo](https://github.com/deniscerri/ytdlnis) | Download from Youtube and Youtube Music, ... | -- |
 
 # Android TV
 
