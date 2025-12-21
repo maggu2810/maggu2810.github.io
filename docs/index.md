@@ -29,6 +29,7 @@
 ## Games
 
 * [Descent](games/descent.md)
+* [It takes two](games/ittakestwo.md)
 
 ## Linux
 
