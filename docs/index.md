@@ -4,13 +4,8 @@
 
 * ROMs
     * [Android ROM list](https://github.com/musabcel/android_rom_list)
-* [Shizuku](https://shizuku.rikka.app/)
-    * Lists
-        * [awesome-shizuku](https://github.com/timschneeb/awesome-shizuku?tab=readme-ov-file)
-        * [ShizukuApps](https://github.com/SheeshTony/ShizukuApps?tab=readme-ov-file)
-    * Apps
-        * [InstallWithOptions](https://github.com/zacharee/InstallWithOptions)
-        * [Language Selector](https://github.com/VegaBobo/Language-Selector)
+* [Shizuku](android/shizuku.md)
+
 
 ## Apps
 
