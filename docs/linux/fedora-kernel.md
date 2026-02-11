@@ -14,14 +14,26 @@ Fedora Kernel
 * [Fedora Wiki: Building a custom kernel: Building the kernel](https://fedoraproject.org/wiki/Building_a_custom_kernel#Building_the_kernel)
 * [Gentoo Wiki: Kernel git-bisect](https://wiki.gentoo.org/wiki/Kernel_git-bisect)
 
+# Install Kernel using koji
+
 ```
-cd ~/workspace/oss/fedora/koji/
+mkdir -p ~/workspace/oss/fedora/koji/kernel
+cd ~/workspace/oss/fedora/koji/kernel
 
-export KERNEL_ID="kernel-6.11.0-0.rc5.43.fc41"
-mkdir "${KERNEL_ID}"
-cd "${KERNEL_ID}"
+# create list of available kernels
+koji search rpm "kernel*" > rpm-kernel.list
+cat rpm-kernel.list | sort -V > rpm-kernel-sorted.list
 
-koji download-build --arch=x86_64 --arch=noarch "${KERNEL_ID}"
+# check for specific version
+cat kernel-rpm-sorted.list | grep kernel-6.18
 
-sudo dnf install $(ls *"${KERNEL_ID}"* | grep -v -e '.*debug.*\.rpm' -e '.*uki.*\.rpm')
+# set variables
+export ARCH=x86_64
+export VERSION=6.18.9-200.fc43
+
+# download kernel packages
+koji download-build --arch="${ARCH}" --arch=noarch kernel-"${VERSION}"
+
+# install related kernel packages
+sudo dnf install $(for PKG in kernel kernel-core kernel-devel kernel-modules kernel-modules-core kernel-modules-extra kernel-modules-internal; do echo ${PKG}-${VERSION}.${ARCH}.rpm; done)
 ```

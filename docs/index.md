@@ -33,9 +33,10 @@
 * [container](linux/container.md)
 * [devicetree](linux/devicetree.md)
 * Fedora
-  * [kernel](linux/fedora-kernel.md)
-  * [packaging](linux/fedora-packaging.md)
-  * [troubleshooting](linux/fedora-troubleshooting.md)
+	* [KDE](linux/fedora-kde.md)
+	* [kernel](linux/fedora-kernel.md)
+	* [packaging](linux/fedora-packaging.md)
+	* [troubleshooting](linux/fedora-troubleshooting.md)
 * [udev](linux/udev.md)
 * [notes](linux/notes.md)
 
