@@ -45,6 +45,7 @@
 ### Languages (general)
 
 * [C++](development/language/cpp.md)
+  * [strict aliasing](development/language/cpp/strict-aliasing.md)
 * [Python](development/language/python.md)
 
 ### Arduino
