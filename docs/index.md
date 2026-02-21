@@ -38,6 +38,7 @@
 	* [packaging](linux/fedora-packaging.md)
 	* [troubleshooting](linux/fedora-troubleshooting.md)
 * [udev](linux/udev.md)
+* [USB (Gadgets, ...)](linux/usb.md)
 * [notes](linux/notes.md)
 
 ## Development
