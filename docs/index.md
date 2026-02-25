@@ -5,8 +5,12 @@
 * ROMs
     * [Android ROM list](https://github.com/musabcel/android_rom_list)
 * [Shizuku](android/shizuku.md)
-
-
+* DNS, Ad block, Firewall
+	* Rethink, RethinkDNS
+		* [Homepage](https://rethinkdns.com/)
+		* [official doc](https://docs.rethinkdns.com/)
+		* [Unofficial Guide](https://mako088.github.io/android/RethinkDNS_Guide.html)
+		* [Unofficial User Guide](https://tsawyer87.github.io/posts/rethinkdns_user_guide/)
 ## Apps
 
 * [rsync](apps/rsync.md)
