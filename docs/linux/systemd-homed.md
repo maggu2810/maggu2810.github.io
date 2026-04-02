@@ -23,10 +23,23 @@ systemd-homed
 Examples
 
 ```
-sudo \
-    homectl \
-        --image-path=/dev/sda \
-        --storage=luks \
-        --fs-type=btrfs \
-        create username
+homectl \
+    --image-path=/dev/sda \
+    --storage=luks \
+    --fs-type=btrfs \
+    create username
+```
+
+```
+homectl \
+    inspect maggu2810 \
+
+homectl \
+    inspect maggu2810 \
+    --json=short | jq '.memberOf | join(",")'
+```
+
+```
+homectl update username \
+    --member-of="docker,wheel,dialout,qemu,wireshark,libvirt"
 ```
