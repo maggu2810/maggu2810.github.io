@@ -44,6 +44,7 @@
 * [udev](linux/udev.md)
 * [USB (Gadgets, ...)](linux/usb.md)
 * [notes](linux/notes.md)
+* [systemd-homed](linux/systemd-homed.md)
 
 ## Development
 
